@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Organization of the Nervous System — Drag & Drop</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#f0f4f8;color:#1a1a2e;padding:16px}
+.wrap{max-width:760px;margin:0 auto;background:#fff;border-radius:12px;padding:24px 20px;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#185FA5;margin-bottom:6px}
+h1{font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+.sub{font-size:13px;color:#666;margin-bottom:20px;line-height:1.5}
+
+/* Score bar */
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.score-badge{font-size:13px;font-weight:700;color:#185FA5}
+.btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:background .15s}
+.btn-blue{background:#185FA5;color:#fff}
+.btn-blue:hover{background:#0C447C}
+.btn-gray{background:#e0e0e0;color:#444}
+.btn-gray:hover{background:#c8c8c8}
+
+/* Label bank */
+.bank-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:8px}
+.bank{display:flex;flex-wrap:wrap;gap:8px;min-height:48px;padding:12px;background:#f7f9fc;border:2px dashed #c0cfe0;border-radius:10px;margin-bottom:20px}
+.tag{padding:7px 14px;background:#185FA5;color:#fff;border-radius:20px;font-size:13px;font-weight:600;cursor:grab;user-select:none;transition:opacity .15s,transform .15s;touch-action:none}
+.tag:active{cursor:grabbing;opacity:.8}
+.tag.dragging{opacity:.4;transform:scale(.95)}
+.tag.used{display:none}
+
+/* Drop zones */
+.categories{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.category{background:#f7f9fc;border:2px solid #d0d7e0;border-radius:10px;padding:12px}
+.cat-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #d0d7e0}
+.cat-title.cns{color:#185FA5;border-color:#185FA5}
+.cat-title.pns{color:#7B3FA0;border-color:#7B3FA0}
+.cat-title.som{color:#0F6E56;border-color:#0F6E56}
+.cat-title.aut{color:#B85C00;border-color:#B85C00}
+.cat-title.sym{color:#A32D2D;border-color:#A32D2D}
+.cat-title.par{color:#1565A8;border-color:#1565A8}
+.dropzone{min-height:44px;border:2px dashed #c0cfe0;border-radius:8px;padding:6px;display:flex;flex-wrap:wrap;gap:6px;transition:background .15s,border-color .15s}
+.dropzone.over{background:#EBF3FC;border-color:#185FA5}
+.dropzone .tag{background:#555;font-size:12px;padding:5px 11px;cursor:default}
+.dropzone .tag.correct{background:#0F6E56}
+.dropzone .tag.wrong{background:#A32D2D}
+.dropzone .tag.removable{cursor:pointer}
+.dropzone .tag.removable:hover{opacity:.75}
+
+/* Feedback */
+.feedback-area{display:none;margin-top:4px}
+.feedback-area.show{display:block}
+.fb-item{font-size:13px;line-height:1.6;padding:8px 12px;border-radius:8px;margin-bottom:6px}
+.fb-item.ok{background:#E1F5EE;color:#085041;border-left:4px solid #0F6E56}
+.fb-item.bad{background:#FCEBEB;color:#501313;border-left:4px solid #A32D2D}
+
+/* Results */
+.results{display:none;text-align:center;padding:16px 0}
+.results.show{display:block}
+.res-pct{font-size:56px;font-weight:700;color:#185FA5;line-height:1}
+.res-grade{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#185FA5;margin-bottom:6px}
+.res-remark{font-size:14px;color:#666;margin:6px 0 20px}
+.stat-row{display:flex;gap:10px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
+.stat{background:#f0f4f8;border-radius:8px;padding:12px 20px;text-align:center}
+.stat-n{font-size:22px;font-weight:700;color:#1a1a2e}
+.stat-l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-top:2px}
+hr{border:none;border-top:1px solid #e0e0e0;margin:0 0 16px}
+
+@media(max-width:520px){
+  .categories{grid-template-columns:1fr}
+  .wrap{padding:16px 12px}
+  h1{font-size:17px}
+  .res-pct{font-size:44px}
+  .btn{width:100%}
+  .score-row{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Physiological Psychology</div>
+  <h1>Organization of the Nervous System</h1>
+  <p class="sub">Drag each label to the correct division of the nervous system. Tap a placed label to return it to the bank.</p>
+
+  <div class="score-row">
+    <span class="score-badge" id="score-disp">0 / 10 placed</span>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-blue" onclick="checkAnswers()" id="check-btn">Check answers</button>
+      <button class="btn btn-gray" onclick="resetAll()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Label bank -->
+  <div class="bank-label">Label bank — drag to the correct category</div>
+  <div class="bank" id="bank"
+    ondragover="event.preventDefault();this.classList.add('over')"
+    ondragleave="this.classList.remove('over')"
+    ondrop="dropToBank(event)">
+  </div>
+
+  <!-- Categories -->
+  <div class="categories">
+
+    <div class="category">
+      <div class="cat-title cns">Central Nervous System (CNS)</div>
+      <div class="dropzone" id="dz-cns"
+        ondragover="dzOver(event,this)"
+        ondragleave="dzLeave(this)"
+        ondrop="dropTo(event,'cns')">
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="cat-title pns">Peripheral Nervous System (PNS)</div>
+      <div class="dropzone" id="dz-pns"
+        ondragover="dzOver(event,this)"
+        ondragleave="dzLeave(this)"
+        ondrop="dropTo(event,'pns')">
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="cat-title som">Somatic Nervous System</div>
+      <div class="dropzone" id="dz-som"
+        ondragover="dzOver(event,this)"
+        ondragleave="dzLeave(this)"
+        ondrop="dropTo(event,'som')">
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="cat-title aut">Autonomic Nervous System</div>
+      <div class="dropzone" id="dz-aut"
+        ondragover="dzOver(event,this)"
+        ondragleave="dzLeave(this)"
+        ondrop="dropTo(event,'aut')">
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="cat-title sym">Sympathetic Division</div>
+      <div class="dropzone" id="dz-sym"
+        ondragover="dzOver(event,this)"
+        ondragleave="dzLeave(this)"
+        ondrop="dropTo(event,'sym')">
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="cat-title par">Parasympathetic Division</div>
+      <div class="dropzone" id="dz-par"
+        ondragover="dzOver(event,this)"
+        ondragleave="dzLeave(this)"
+        ondrop="dropTo(event,'par')">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Per-item feedback -->
+  <div class="feedback-area" id="feedback-area"></div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+    <div class="res-grade" id="r-grade"></div>
+    <div class="res-pct" id="r-pct"></div>
+    <p class="res-remark" id="r-remark"></p>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-n" id="r-ok"></div><div class="stat-l">Correct</div></div>
+      <div class="stat"><div class="stat-n" id="r-bad"></div><div class="stat-l">Incorrect</div></div>
+      <div class="stat"><div class="stat-n">10</div><div class="stat-l">Items</div></div>
+    </div>
+    <hr/>
+    <button class="btn btn-blue" onclick="resetAll()">Try again</button>
+  </div>
+
+</div>
+
+<script>
+// Items: {id, text, correct category, feedback}
+var ITEMS = [
+  {id:'i1', text:'Brain & spinal cord', cat:'cns',
+   ok:'Correct! The brain and spinal cord together form the CNS — the command center that processes all incoming and outgoing information.',
+   bad:'The brain and spinal cord are the two components of the Central Nervous System (CNS), not the PNS or its subdivisions.'},
+  {id:'i2', text:'Cranial & spinal nerves', cat:'pns',
+   ok:'Correct! Cranial and spinal nerves are part of the PNS — they carry signals between the CNS and the rest of the body.',
+   bad:'Cranial and spinal nerves belong to the Peripheral Nervous System (PNS). They relay information to and from the CNS.'},
+  {id:'i3', text:'Controls voluntary muscle movement', cat:'som',
+   ok:'Correct! The somatic nervous system governs conscious, voluntary control of skeletal muscles.',
+   bad:'Voluntary muscle control is a function of the Somatic Nervous System, which allows conscious movement of skeletal muscles.'},
+  {id:'i4', text:'Regulates internal organs & glands', cat:'aut',
+   ok:'Correct! The autonomic nervous system automatically regulates visceral functions like heart rate, digestion, and gland secretion.',
+   bad:'Regulation of internal organs and glands is the job of the Autonomic Nervous System — it operates largely below conscious awareness.'},
+  {id:'i5', text:'Fight-or-flight response', cat:'sym',
+   ok:'Correct! The sympathetic division mobilizes the body for action — increasing heart rate, dilating pupils, and redirecting blood to muscles.',
+   bad:'The fight-or-flight response is driven by the Sympathetic Division, which prepares the body to respond to perceived threats or stress.'},
+  {id:'i6', text:'Rest-and-digest functions', cat:'par',
+   ok:'Correct! The parasympathetic division promotes energy conservation — slowing heart rate, stimulating digestion, and restoring homeostasis.',
+   bad:'Rest-and-digest functions are controlled by the Parasympathetic Division, which counterbalances the sympathetic response and promotes recovery.'},
+  {id:'i7', text:'Includes the cerebellum & brainstem', cat:'cns',
+   ok:'Correct! The cerebellum and brainstem are both CNS structures — the cerebellum coordinates movement and the brainstem regulates vital functions.',
+   bad:'The cerebellum and brainstem are CNS structures. They are located within the skull and spinal column, not part of the peripheral nerves.'},
+  {id:'i8', text:'Carries sensory info from skin & muscles', cat:'som',
+   ok:'Correct! The somatic nervous system also carries afferent (sensory) signals from skin, muscles, and joints back to the CNS.',
+   bad:'Sensory information from skin and muscles is relayed by the Somatic Nervous System via afferent pathways to the CNS for processing.'},
+  {id:'i9', text:'Increases heart rate & dilates pupils', cat:'sym',
+   ok:'Correct! These are classic sympathetic responses — the body redirects energy to vital systems during stress or danger.',
+   bad:'Increased heart rate and pupil dilation are sympathetic responses. The Sympathetic Division activates these changes to prepare the body for action.'},
+  {id:'i10', text:'Slows heart rate & stimulates digestion', cat:'par',
+   ok:'Correct! The parasympathetic division slows the heart and activates digestive processes — conserving energy during rest.',
+   bad:'Slowing heart rate and stimulating digestion are parasympathetic functions. The Parasympathetic Division promotes homeostasis and recovery after stress.'}
+];
+
+// Track where each item is placed
+var placement = {}; // id -> cat or 'bank'
+var dragId = null;
+var checked = false;
+
+function init() {
+  var bank = document.getElementById('bank');
+  bank.innerHTML = '';
+  // Clear all dropzones
+  var dzs = document.querySelectorAll('.dropzone');
+  for (var d=0;d<dzs.length;d++) dzs[d].innerHTML = '';
+  // Reset state
+  placement = {};
+  checked = false;
+  document.getElementById('feedback-area').classList.remove('show');
+  document.getElementById('feedback-area').innerHTML = '';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('check-btn').disabled = false;
+  updateScore();
+
+  for (var i=0;i<ITEMS.length;i++) {
+    var item = ITEMS[i];
+    placement[item.id] = 'bank';
+    var tag = makeTag(item, 'bank');
+    bank.appendChild(tag);
+  }
+}
+
+function makeTag(item, loc) {
+  var tag = document.createElement('div');
+  tag.className = 'tag' + (loc !== 'bank' ? ' removable' : '');
+  tag.id = 'tag-' + item.id;
+  tag.textContent = item.text;
+  tag.draggable = true;
+  tag.setAttribute('data-id', item.id);
+
+  tag.addEventListener('dragstart', function(e) {
+    if (checked) return;
+    dragId = this.getAttribute('data-id');
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  tag.addEventListener('dragend', function() {
+    this.classList.remove('dragging');
+    dragId = null;
+  });
+
+  // Click to return to bank (when in a dropzone)
+  if (loc !== 'bank') {
+    tag.addEventListener('click', function() {
+      if (checked) return;
+      var id = this.getAttribute('data-id');
+      returnToBank(id);
+    });
+  }
+
+  // Touch support
+  addTouchDrag(tag, item.id);
+
+  return tag;
+}
+
+function addTouchDrag(el, id) {
+  var startX, startY, clone, originZone;
+  el.addEventListener('touchstart', function(e) {
+    if (checked) return;
+    var t = e.touches[0];
+    startX = t.clientX; startY = t.clientY;
+    originZone = placement[id];
+    clone = el.cloneNode(true);
+    clone.style.position = 'fixed';
+    clone.style.opacity = '0.7';
+    clone.style.pointerEvents = 'none';
+    clone.style.zIndex = '9999';
+    clone.style.margin = '0';
+    clone.style.transform = 'scale(1.05)';
+    document.body.appendChild(clone);
+    posClone(clone, t.clientX, t.clientY);
+    el.style.opacity = '0.3';
+  }, {passive:true});
+
+  el.addEventListener('touchmove', function(e) {
+    if (!clone) return;
+    e.preventDefault();
+    var t = e.touches[0];
+    posClone(clone, t.clientX, t.clientY);
+    // highlight dropzone under finger
+    clone.style.display = 'none';
+    var under = document.elementFromPoint(t.clientX, t.clientY);
+    clone.style.display = '';
+    var dz = under ? under.closest('.dropzone, .bank') : null;
+    document.querySelectorAll('.dropzone,.bank').forEach(function(z){z.classList.remove('over');});
+    if (dz) dz.classList.add('over');
+  }, {passive:false});
+
+  el.addEventListener('touchend', function(e) {
+    if (!clone) return;
+    var t = e.changedTouches[0];
+    clone.style.display = 'none';
+    var under = document.elementFromPoint(t.clientX, t.clientY);
+    clone.style.display = '';
+    document.body.removeChild(clone); clone = null;
+    el.style.opacity = '';
+    document.querySelectorAll('.dropzone,.bank').forEach(function(z){z.classList.remove('over');});
+
+    var dz = under ? under.closest('.dropzone') : null;
+    var bk = under ? under.closest('.bank') : null;
+
+    if (dz) {
+      var cat = dz.id.replace('dz-','');
+      placeItem(id, cat);
+    } else if (bk) {
+      returnToBank(id);
+    }
+  }, {passive:true});
+}
+
+function posClone(clone, x, y) {
+  clone.style.left = (x - clone.offsetWidth/2) + 'px';
+  clone.style.top = (y - clone.offsetHeight/2) + 'px';
+}
+
+function dzOver(e, el) {
+  e.preventDefault();
+  el.classList.add('over');
+}
+function dzLeave(el) { el.classList.remove('over'); }
+
+function dropTo(e, cat) {
+  e.preventDefault();
+  document.querySelectorAll('.dropzone').forEach(function(z){z.classList.remove('over');});
+  if (!dragId) return;
+  placeItem(dragId, cat);
+  dragId = null;
+}
+
+function dropToBank(e) {
+  e.preventDefault();
+  document.getElementById('bank').classList.remove('over');
+  if (!dragId) return;
+  returnToBank(dragId);
+  dragId = null;
+}
+
+function placeItem(id, cat) {
+  if (checked) return;
+  // Remove from current location
+  var existing = document.getElementById('tag-' + id);
+  if (existing) existing.parentNode.removeChild(existing);
+
+  var item = getItem(id);
+  var tag = makeTag(item, cat);
+  tag.classList.add('removable');
+  tag.addEventListener('click', function() {
+    if (checked) return;
+    returnToBank(id);
+  });
+
+  document.getElementById('dz-' + cat).appendChild(tag);
+  placement[id] = cat;
+  updateScore();
+}
+
+function returnToBank(id) {
+  if (checked) return;
+  var existing = document.getElementById('tag-' + id);
+  if (existing) existing.parentNode.removeChild(existing);
+  var item = getItem(id);
+  var tag = makeTag(item, 'bank');
+  document.getElementById('bank').appendChild(tag);
+  placement[id] = 'bank';
+  updateScore();
+}
+
+function getItem(id) {
+  for (var i=0;i<ITEMS.length;i++) if (ITEMS[i].id===id) return ITEMS[i];
+}
+
+function updateScore() {
+  var placed = 0;
+  for (var id in placement) if (placement[id] !== 'bank') placed++;
+  document.getElementById('score-disp').textContent = placed + ' / 10 placed';
+}
+
+function checkAnswers() {
+  // Must have all 10 placed
+  var placed = 0;
+  for (var id in placement) if (placement[id] !== 'bank') placed++;
+  if (placed < 10) {
+    alert('Please place all 10 labels before checking.');
+    return;
+  }
+  checked = true;
+  document.getElementById('check-btn').disabled = true;
+
+  var correct = 0;
+  var fbHTML = '';
+
+  for (var i=0;i<ITEMS.length;i++) {
+    var item = ITEMS[i];
+    var tag = document.getElementById('tag-' + item.id);
+    var isOk = placement[item.id] === item.cat;
+    if (isOk) {
+      correct++;
+      if (tag) tag.classList.add('correct');
+      fbHTML += '<div class="fb-item ok"><strong>&#10003; ' + item.text + '</strong> &mdash; ' + item.ok + '</div>';
+    } else {
+      if (tag) tag.classList.add('wrong');
+      var catName = catLabel(item.cat);
+      fbHTML += '<div class="fb-item bad"><strong>&#10007; ' + item.text + '</strong> &mdash; ' + item.bad + ' (Correct category: <em>' + catName + '</em>)</div>';
+    }
+  }
+
+  var fa = document.getElementById('feedback-area');
+  fa.innerHTML = fbHTML;
+  fa.classList.add('show');
+
+  var pct = Math.round((correct/10)*100);
+  var grade = pct>=83?'Outstanding':pct>=67?'Proficient':pct>=50?'Developing':'Needs Review';
+  var remark = pct>=83?'Excellent understanding of nervous system organization.':pct>=67?'Good work — review a few categories for full mastery.':pct>=50?'Foundational grasp present — keep studying the divisions.':'Keep going — nervous system organization takes practice.';
+
+  document.getElementById('r-grade').textContent = grade;
+  document.getElementById('r-pct').textContent = pct + '%';
+  document.getElementById('r-remark').textContent = remark;
+  document.getElementById('r-ok').textContent = correct;
+  document.getElementById('r-bad').textContent = 10 - correct;
+  document.getElementById('results').classList.add('show');
+
+  // Scroll to feedback
+  document.getElementById('feedback-area').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function catLabel(cat) {
+  var map = {cns:'Central Nervous System',pns:'Peripheral Nervous System',som:'Somatic Nervous System',aut:'Autonomic Nervous System',sym:'Sympathetic Division',par:'Parasympathetic Division'};
+  return map[cat] || cat;
+}
+
+function resetAll() {
+  checked = false;
+  init();
+  window.scrollTo(0,0);
+}
+
+init();
+</script>
+</body>
+</html>
