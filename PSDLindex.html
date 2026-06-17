@@ -4,14 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PsychStat Decision Lab</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="PSDLstyles.css" />
 </head>
 <body>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Psychological Statistics AI-App</p>
-      <h1>PsychStat Decision Lab</h1>
-      <p class="subtitle">Practice statistical decision-making, assumption checking, APA interpretation, and board-style reasoning using psychology-based cases.</p>
+      <div>
+        <p class="eyebrow">Psychological Statistics Interactive Lab</p>
+        <h1>PsychStat Decision Lab</h1>
+        <p class="subtitle">A Canvas-ready app for learning statistical decision-making, assumptions, computation, APA interpretation, and board-style reasoning using psychology cases.</p>
+      </div>
+      <aside class="progress-card" aria-live="polite">
+        <span>Progress</span>
+        <strong id="progressText">0%</strong>
+        <div class="progress-track"><div id="progressBar"></div></div>
+      </aside>
     </div>
   </header>
 
@@ -19,16 +26,24 @@
     <nav class="tabs" aria-label="PsychStat Decision Lab sections">
       <button class="tab active" data-tab="selector">Test Selector</button>
       <button class="tab" data-tab="scenario">Scenario Lab</button>
-      <button class="tab" data-tab="assumptions">Assumption Checker</button>
+      <button class="tab" data-tab="assumptions">Assumptions</button>
+      <button class="tab" data-tab="analyzer">Mini Analyzer</button>
       <button class="tab" data-tab="apa">APA Trainer</button>
-      <button class="tab" data-tab="quiz">Board Exam Mode</button>
+      <button class="tab" data-tab="quiz">Board Exam</button>
       <button class="tab" data-tab="export">Export</button>
     </nav>
 
     <section id="selector" class="panel active">
       <div class="panel-header">
         <h2>Choose the Correct Statistical Test</h2>
-        <p>Answer the guide questions. The app recommends a test and gives the psychology-based reason.</p>
+        <p>Use the guided prompts. The app gives the test, the decision rule, and a short psychology-based explanation.</p>
+      </div>
+
+      <div class="stepper">
+        <div class="step active"><span>1</span> Research goal</div>
+        <div class="step"><span>2</span> Design</div>
+        <div class="step"><span>3</span> Variable level</div>
+        <div class="step"><span>4</span> Assumptions</div>
       </div>
 
       <div class="grid two">
@@ -40,7 +55,6 @@
             <option value="frequency">Compare categories or frequencies</option>
           </select>
         </label>
-
         <label>Number of groups or variables
           <select id="groups">
             <option value="two">Two</option>
@@ -48,7 +62,6 @@
             <option value="one">One group / one sample</option>
           </select>
         </label>
-
         <label>Group relationship
           <select id="relationship">
             <option value="independent">Independent groups</option>
@@ -56,7 +69,6 @@
             <option value="none">Not applicable</option>
           </select>
         </label>
-
         <label>Outcome variable level
           <select id="level">
             <option value="continuous">Continuous / scale</option>
@@ -64,7 +76,6 @@
             <option value="categorical">Categorical</option>
           </select>
         </label>
-
         <label>Assumptions
           <select id="assumptionStatus">
             <option value="met">Mostly met</option>
@@ -72,7 +83,6 @@
             <option value="unknown">Unknown / not yet checked</option>
           </select>
         </label>
-
         <label>Psychology context
           <select id="context">
             <option value="clinical">Clinical or counseling data</option>
@@ -84,18 +94,22 @@
         </label>
       </div>
 
-      <button class="primary" id="recommendBtn">Recommend Test</button>
+      <div class="toolbar">
+        <button class="primary" id="recommendBtn">Recommend Test</button>
+        <button class="secondary" id="resetSelectorBtn">Reset</button>
+      </div>
       <div id="recommendation" class="result-card"></div>
     </section>
 
     <section id="scenario" class="panel">
       <div class="panel-header">
         <h2>Psychology Scenario Lab</h2>
-        <p>Generate a short case. Identify the variables, design, hypotheses, and correct analysis.</p>
+        <p>Generate a case, answer the fields, then check your work against the suggested answer.</p>
       </div>
 
       <div class="toolbar">
         <button class="primary" id="newScenarioBtn">Generate Scenario</button>
+        <button class="secondary" id="checkScenarioBtn">Check My Answer</button>
         <button class="secondary" id="showScenarioAnswerBtn">Show Suggested Answer</button>
       </div>
 
@@ -116,19 +130,20 @@
         </label>
       </div>
 
+      <div id="scenarioFeedback" class="result-card"></div>
       <div id="scenarioAnswer" class="result-card muted"></div>
     </section>
 
     <section id="assumptions" class="panel">
       <div class="panel-header">
         <h2>Assumption Checker</h2>
-        <p>Check whether a parametric or nonparametric test is more appropriate.</p>
+        <p>Check whether parametric analysis is defensible or whether a nonparametric alternative is safer.</p>
       </div>
 
       <div class="checklist">
         <label><input type="checkbox" class="assumption" value="scale" /> Outcome variable is continuous or approximately scale-level.</label>
-        <label><input type="checkbox" class="assumption" value="independent" /> Observations are independent unless using a repeated-measures design.</label>
-        <label><input type="checkbox" class="assumption" value="normal" /> Scores are approximately normally distributed or sample size is adequate.</label>
+        <label><input type="checkbox" class="assumption" value="independent" /> Observations are independent unless using repeated measures.</label>
+        <label><input type="checkbox" class="assumption" value="normal" /> Scores are approximately normal or sample size is adequate.</label>
         <label><input type="checkbox" class="assumption" value="variance" /> Variances are approximately equal for independent group comparisons.</label>
         <label><input type="checkbox" class="assumption" value="outliers" /> No severe outliers distort the result.</label>
       </div>
@@ -137,10 +152,42 @@
       <div id="assumptionResult" class="result-card"></div>
     </section>
 
+    <section id="analyzer" class="panel">
+      <div class="panel-header">
+        <h2>Mini Data Analyzer</h2>
+        <p>Paste small classroom datasets. The app computes descriptives and a basic t-test without external libraries.</p>
+      </div>
+
+      <div class="grid two">
+        <label>Analysis type
+          <select id="analysisType">
+            <option value="independent">Independent samples t-test</option>
+            <option value="paired">Paired samples t-test</option>
+            <option value="descriptive">Descriptive statistics only</option>
+          </select>
+        </label>
+        <label>Outcome label
+          <input id="analyzerOutcome" type="text" placeholder="e.g., anxiety scores" />
+        </label>
+        <label>Group A / Pretest values
+          <textarea id="groupAData" rows="6">12, 15, 14, 18, 16</textarea>
+        </label>
+        <label>Group B / Posttest values
+          <textarea id="groupBData" rows="6">10, 11, 13, 12, 9</textarea>
+        </label>
+      </div>
+
+      <div class="toolbar">
+        <button class="primary" id="analyzeBtn">Analyze Data</button>
+        <button class="secondary" id="loadSampleBtn">Load Psychology Sample</button>
+      </div>
+      <div id="analyzerOutput" class="result-card"></div>
+    </section>
+
     <section id="apa" class="panel">
       <div class="panel-header">
         <h2>APA Interpretation Trainer</h2>
-        <p>Input common statistics and produce a concise APA-style interpretation.</p>
+        <p>Input common statistics and generate a concise APA-style interpretation.</p>
       </div>
 
       <div class="grid three">
@@ -181,20 +228,28 @@
         </label>
       </div>
 
-      <button class="primary" id="generateApaBtn">Generate APA Interpretation</button>
+      <div class="toolbar">
+        <button class="primary" id="generateApaBtn">Generate APA Interpretation</button>
+        <button class="secondary" id="copyApaBtn">Copy APA Text</button>
+      </div>
       <div id="apaOutput" class="result-card"></div>
     </section>
 
     <section id="quiz" class="panel">
       <div class="panel-header">
         <h2>Board Exam Mode</h2>
-        <p>Practice licensure-style statistical reasoning with immediate rationale.</p>
+        <p>Practice licensure-style statistical reasoning. The score updates after each checked item.</p>
       </div>
 
+      <div class="score-strip">
+        <span id="quizScore">Score: 0/0</span>
+        <span id="quizStatus">Select an answer.</span>
+      </div>
       <div id="quizBox" class="quiz-box"></div>
       <div class="toolbar">
         <button class="primary" id="checkQuizBtn">Check Answer</button>
         <button class="secondary" id="nextQuizBtn">Next Question</button>
+        <button class="secondary" id="restartQuizBtn">Restart Quiz</button>
       </div>
       <div id="quizFeedback" class="result-card"></div>
     </section>
@@ -202,7 +257,7 @@
     <section id="export" class="panel">
       <div class="panel-header">
         <h2>Export Student Work</h2>
-        <p>Generate a copyable learning log for Canvas submission.</p>
+        <p>Generate a learning log for Canvas submission. The log captures the latest recommendation, scenario, computation, APA text, and quiz score.</p>
       </div>
 
       <label>Student name
@@ -211,16 +266,19 @@
       <label>Reflection notes
         <textarea id="reflection" rows="8" placeholder="What did you learn about selecting and interpreting statistical tests?"></textarea>
       </label>
-      <button class="primary" id="exportBtn">Generate Learning Log</button>
-      <textarea id="exportOutput" rows="14" readonly></textarea>
+      <div class="toolbar">
+        <button class="primary" id="exportBtn">Generate Learning Log</button>
+        <button class="secondary" id="copyLogBtn">Copy Log</button>
+      </div>
+      <textarea id="exportOutput" rows="16" readonly></textarea>
     </section>
   </main>
 
   <footer>
-    <p>PsychStat Decision Lab · Designed for Psychological Statistics · Static GitHub Pages App</p>
+    <p>PsychStat Decision Lab · Designed for Psychological Statistics · Static GitHub Pages / Canvas App</p>
   </footer>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script src="PSDLdata.js"></script>
+  <script src="PSDLapp.js"></script>
 </body>
 </html>

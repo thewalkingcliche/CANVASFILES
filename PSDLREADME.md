@@ -1,43 +1,32 @@
 # PsychStat Decision Lab
 
-A static browser-based learning app for Psychological Statistics. It helps students practice statistical test selection, psychology-based scenario analysis, assumption checking, APA-style interpretation, and board-exam-style reasoning.
+Canvas-ready static web app for Psychological Statistics.
 
 ## Files
 
-- `index.html` - main app structure
-- `styles.css` - pastel teal and warm gold theme
-- `data.js` - psychology scenarios and quiz questions
-- `app.js` - app logic
+- `PSDLindex.html`
+- `PSDLstyles.css`
+- `PSDLdata.js`
+- `PSDLapp.js`
+- `PSDLREADME.md`
 
-## GitHub Pages Deployment
+## Features
 
-1. Create a folder in your GitHub repository named:
+- Interactive statistical test selector
+- Psychology scenario generator with answer checking
+- Assumption checker
+- Mini data analyzer for descriptives and basic t-tests
+- APA interpretation generator
+- Board exam mode with score tracking
+- Exportable student learning log
 
-```text
-psychstat-decision-lab
-```
+## GitHub Pages / Canvas URL
 
-2. Upload these files inside that folder:
-
-```text
-index.html
-styles.css
-data.js
-app.js
-README.md
-```
-
-3. Your GitHub Pages URL should be:
-
-```text
-https://thewalkingcliche.github.io/CANVASFILES/psychstat-decision-lab/
-```
-
-## Canvas iframe
+After uploading the files to the root of `CANVASFILES`, use:
 
 ```html
 <iframe 
-  src="https://thewalkingcliche.github.io/CANVASFILES/psychstat-decision-lab/" 
+  src="https://thewalkingcliche.github.io/CANVASFILES/PSDLindex.html" 
   width="100%" 
   height="950" 
   style="border: 1px solid #ddd; border-radius: 12px;" 
@@ -46,6 +35,6 @@ https://thewalkingcliche.github.io/CANVASFILES/psychstat-decision-lab/
 </iframe>
 ```
 
-## Notes
+## Note
 
-This is a static app. It does not require a backend, database, or API key.
+The mini analyzer uses an approximate p-value for classroom learning. Use JASP, jamovi, SPSS, R, or Excel for reportable analyses.
