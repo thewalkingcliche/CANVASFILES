@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Neurons & Neural Transmission Quiz</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#f0f4f8;padding:20px;color:#1a1a2e}
+.wrap{max-width:640px;margin:0 auto;background:#fff;border-radius:12px;padding:28px 24px;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#185FA5;margin-bottom:6px}
+h1{font-size:22px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+.sub{font-size:13px;color:#666;margin-bottom:20px}
+.prog-row{display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:5px}
+.prog-track{height:6px;background:#e0e0e0;border-radius:3px;margin-bottom:18px}
+.prog-fill{height:6px;background:#185FA5;border-radius:3px;transition:width .4s}
+.screen{display:none}
+.screen.active{display:block}
+.q-num{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#185FA5;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:600;line-height:1.6;color:#1a1a2e;margin-bottom:16px}
+.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;background:#f7f9fc;border:2px solid #d0d7e0;border-radius:8px;font-size:14px;color:#1a1a2e;cursor:pointer;text-align:left;transition:border-color .15s,background .15s;width:100%}
+.opt:hover{border-color:#85B7EB;background:#EBF3FC}
+.opt.selected{border-color:#185FA5;background:#EBF3FC}
+.opt.correct{border-color:#0F6E56;background:#E1F5EE;cursor:default}
+.opt.wrong{border-color:#A32D2D;background:#FCEBEB;cursor:default}
+.opt:disabled{cursor:default}
+.opt-key{min-width:22px;height:22px;border-radius:4px;background:#d0d7e0;color:#555;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:background .15s,color .15s}
+.opt.selected .opt-key{background:#185FA5;color:#fff}
+.opt.correct .opt-key{background:#0F6E56;color:#fff}
+.opt.wrong .opt-key{background:#A32D2D;color:#fff}
+.btn{padding:10px 22px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:background .15s}
+.btn-blue{background:#185FA5;color:#fff}
+.btn-blue:hover:not([disabled]){background:#0C447C}
+.btn-blue[disabled]{background:#b0bec5;cursor:default}
+.btn-row{display:flex;gap:10px;margin-top:4px}
+.fb{margin-top:14px;background:#f7f9fc;border:1px solid #d0d7e0;border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.7;display:none}
+.fb.show{display:block}
+.fb-head{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+.fb-head.ok{color:#0F6E56}
+.fb-head.bad{color:#A32D2D}
+.fb-body{color:#1a1a2e}
+.res-wrap{text-align:center;padding:12px 0}
+.res-grade{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#185FA5;margin-bottom:6px}
+.res-pct{font-size:60px;font-weight:700;color:#185FA5;line-height:1.1;margin-bottom:4px}
+.res-remark{font-size:14px;color:#666;margin-bottom:24px}
+.stat-row{display:flex;gap:10px;justify-content:center;margin-bottom:24px}
+.stat{background:#f0f4f8;border-radius:8px;padding:14px 22px;text-align:center}
+.stat-n{font-size:24px;font-weight:700;color:#1a1a2e}
+.stat-l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-top:2px}
+hr{border:none;border-top:1px solid #e0e0e0;margin:0 0 20px}
+.footer{text-align:center;margin-top:24px;font-size:11px;color:#aaa}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Physiological Psychology</div>
+  <h1>Neurons &amp; Neural Transmission</h1>
+  <p class="sub">Answer each question and get instant feedback.</p>
+  <div class="prog-row">
+    <span id="qlabel">Question 1 of 6</span>
+    <span id="qscore">Score: 0 / 6</span>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+
+  <div class="screen active" id="s0">
+    <div class="q-num">Question 1</div>
+    <p class="q-text">A neuron is at rest with a membrane potential of approximately &minus;70 mV. This state is maintained primarily by which mechanism?</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(0,0)"><span class="opt-key">A</span><span>Voltage-gated Na&#8314; channels opening continuously</span></button>
+      <button class="opt" onclick="pick(0,1)"><span class="opt-key">B</span><span>The sodium-potassium pump (Na&#8314;/K&#8314;-ATPase) maintaining ion gradients</span></button>
+      <button class="opt" onclick="pick(0,2)"><span class="opt-key">C</span><span>Ligand-gated Cl&#8315; channels driving hyperpolarization</span></button>
+      <button class="opt" onclick="pick(0,3)"><span class="opt-key">D</span><span>Myelin sheath preventing ion leakage</span></button>
+    </div>
+    <div class="btn-row"><button class="btn btn-blue" id="sb0" onclick="check(0,1)" disabled>Check answer</button></div>
+    <div class="fb" id="fb0"></div>
+  </div>
+
+  <div class="screen" id="s1">
+    <div class="q-num">Question 2</div>
+    <p class="q-text">During an action potential, which sequence of ionic events is correct?</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(1,0)"><span class="opt-key">A</span><span>K&#8314; rushes in &rarr; Na&#8314; rushes out &rarr; repolarization</span></button>
+      <button class="opt" onclick="pick(1,1)"><span class="opt-key">B</span><span>Na&#8314; rushes in (depolarization) &rarr; K&#8314; rushes out (repolarization)</span></button>
+      <button class="opt" onclick="pick(1,2)"><span class="opt-key">C</span><span>Cl&#8315; rushes out &rarr; Na&#8314; rushes in &rarr; hyperpolarization</span></button>
+      <button class="opt" onclick="pick(1,3)"><span class="opt-key">D</span><span>Ca&#178;&#8314; rushes in &rarr; Na&#8314; rushes out &rarr; depolarization</span></button>
+    </div>
+    <div class="btn-row"><button class="btn btn-blue" id="sb1" onclick="check(1,1)" disabled>Check answer</button></div>
+    <div class="fb" id="fb1"></div>
+  </div>
+
+  <div class="screen" id="s2">
+    <div class="q-num">Question 3</div>
+    <p class="q-text">The &ldquo;all-or-none&rdquo; principle of action potentials means that:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(2,0)"><span class="opt-key">A</span><span>Neurons fire at different intensities depending on stimulus strength</span></button>
+      <button class="opt" onclick="pick(2,1)"><span class="opt-key">B</span><span>Once threshold is reached, the action potential fires at full magnitude regardless of stimulus intensity</span></button>
+      <button class="opt" onclick="pick(2,2)"><span class="opt-key">C</span><span>A stronger stimulus produces a faster but smaller action potential</span></button>
+      <button class="opt" onclick="pick(2,3)"><span class="opt-key">D</span><span>Subthreshold stimuli always produce a graded response</span></button>
+    </div>
+    <div class="btn-row"><button class="btn btn-blue" id="sb2" onclick="check(2,1)" disabled>Check answer</button></div>
+    <div class="fb" id="fb2"></div>
+  </div>
+
+  <div class="screen" id="s3">
+    <div class="q-num">Question 4</div>
+    <p class="q-text">Saltatory conduction refers to the action potential &ldquo;jumping&rdquo; between nodes of Ranvier. What makes this possible?</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(3,0)"><span class="opt-key">A</span><span>Voltage-gated channels are concentrated only at nodes of Ranvier along myelinated axons</span></button>
+      <button class="opt" onclick="pick(3,1)"><span class="opt-key">B</span><span>Myelin actively pumps ions between nodes</span></button>
+      <button class="opt" onclick="pick(3,2)"><span class="opt-key">C</span><span>The cell body sends electrical signals directly to each node</span></button>
+      <button class="opt" onclick="pick(3,3)"><span class="opt-key">D</span><span>Dendrites bypass the axon to speed transmission</span></button>
+    </div>
+    <div class="btn-row"><button class="btn btn-blue" id="sb3" onclick="check(3,0)" disabled>Check answer</button></div>
+    <div class="fb" id="fb3"></div>
+  </div>
+
+  <div class="screen" id="s4">
+    <div class="q-num">Question 5</div>
+    <p class="q-text">After an action potential, a neuron enters the absolute refractory period. During this time, the neuron:</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(4,0)"><span class="opt-key">A</span><span>Can fire again but only with a much stronger stimulus</span></button>
+      <button class="opt" onclick="pick(4,1)"><span class="opt-key">B</span><span>Cannot fire another action potential regardless of stimulus intensity</span></button>
+      <button class="opt" onclick="pick(4,2)"><span class="opt-key">C</span><span>Releases neurotransmitters into the synapse</span></button>
+      <button class="opt" onclick="pick(4,3)"><span class="opt-key">D</span><span>Undergoes long-term potentiation</span></button>
+    </div>
+    <div class="btn-row"><button class="btn btn-blue" id="sb4" onclick="check(4,1)" disabled>Check answer</button></div>
+    <div class="fb" id="fb4"></div>
+  </div>
+
+  <div class="screen" id="s5">
+    <div class="q-num">Question 6</div>
+    <p class="q-text">At a chemical synapse, which event directly triggers the release of neurotransmitters into the synaptic cleft?</p>
+    <div class="opts">
+      <button class="opt" onclick="pick(5,0)"><span class="opt-key">A</span><span>Opening of voltage-gated K&#8314; channels at the presynaptic terminal</span></button>
+      <button class="opt" onclick="pick(5,1)"><span class="opt-key">B</span><span>Influx of Ca&#178;&#8314; through voltage-gated calcium channels at the presynaptic terminal</span></button>
+      <button class="opt" onclick="pick(5,2)"><span class="opt-key">C</span><span>Activation of postsynaptic AMPA receptors</span></button>
+      <button class="opt" onclick="pick(5,3)"><span class="opt-key">D</span><span>Reuptake of serotonin by transporter proteins</span></button>
+    </div>
+    <div class="btn-row"><button class="btn btn-blue" id="sb5" onclick="check(5,1)" disabled>Check answer</button></div>
+    <div class="fb" id="fb5"></div>
+  </div>
+
+  <div class="screen" id="sR">
+    <div class="res-wrap">
+      <div class="res-grade" id="r-grade"></div>
+      <div class="res-pct" id="r-pct"></div>
+      <p class="res-remark" id="r-remark"></p>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-n" id="r-ok"></div><div class="stat-l">Correct</div></div>
+        <div class="stat"><div class="stat-n" id="r-bad"></div><div class="stat-l">Incorrect</div></div>
+        <div class="stat"><div class="stat-n">6</div><div class="stat-l">Items</div></div>
+      </div>
+      <hr/>
+      <button class="btn btn-blue" onclick="restart()">Retake quiz</button>
+    </div>
+  </div>
+
+  <div class="footer">Physiological Psychology &nbsp;&middot;&nbsp; Centro Escolar University</div>
+</div>
+<script>
+var FB=[
+  {ok:"Correct! The Na\u207a/K\u207a-ATPase pump continuously moves 3 Na\u207a ions out and 2 K\u207a ions in, maintaining the electrochemical gradient that holds the resting potential at around \u221270 mV. This balance is essential for neuronal excitability \u2014 without it, the cell could not generate action potentials.",A:"Not quite. Voltage-gated Na\u207a channels are closed at rest and only open when the membrane reaches threshold (~\u221255 mV). Continuous opening would keep the cell depolarized and prevent normal action potential generation.",C:"While Cl\u207b channels contribute to membrane stability in some neurons, the primary mechanism maintaining the \u221270 mV resting potential is the Na\u207a/K\u207a-ATPase pump. It is the core engine of ionic balance at rest.",D:"Myelin speeds up conduction along the axon but does not maintain the resting membrane potential. That responsibility belongs to the Na\u207a/K\u207a-ATPase pump, which actively regulates ion concentrations across the membrane."},
+  {ok:"Correct! Depolarization is driven by Na\u207a rushing into the cell through voltage-gated channels, raising the membrane potential. Repolarization follows as K\u207a flows out, restoring the negative charge. This sequence is the ionic signature of every action potential.",A:"It is Na\u207a, not K\u207a, that rushes into the cell during depolarization. K\u207a actually exits the cell during repolarization. Reversing these two ions is a common error \u2014 remember: Na\u207a in first, K\u207a out second.",C:"Cl\u207b influx is associated with inhibitory potentials, not the action potential. The action potential is defined by Na\u207a influx (depolarization) followed by K\u207a efflux (repolarization) \u2014 not Cl\u207b movement.",D:"Ca\u00b2\u207a is critical at the synapse for neurotransmitter release, but it does not drive the action potential itself. Depolarization is caused by Na\u207a rushing in, while repolarization is caused by K\u207a flowing out."},
+  {ok:"Correct! The all-or-none law means every action potential fires at the same full magnitude once threshold is reached. Stimulus intensity is instead encoded by the frequency of firing (rate coding), not the size of each action potential \u2014 a key principle in neural coding.",A:"That describes graded potentials, not action potentials. Action potentials do not vary in amplitude based on stimulus strength. Once threshold is met, the full action potential fires. Intensity is encoded by how often neurons fire, not how large the spike is.",C:"Action potential amplitude does not change with stimulus strength \u2014 a stronger stimulus increases firing frequency, not speed or size. This constancy of amplitude is precisely what the all-or-none principle describes.",D:"Subthreshold stimuli do produce local graded potentials, but these are not action potentials \u2014 they decay quickly and do not propagate. Only stimuli reaching threshold trigger the all-or-none action potential."},
+  {ok:"Correct! Voltage-gated Na\u207a channels are densely clustered at the nodes of Ranvier, the gaps in the myelin sheath. This forces the action potential to regenerate only at these nodes, allowing it to \u2018jump\u2019 rapidly from node to node \u2014 a process that dramatically increases conduction velocity. Diseases like multiple sclerosis that damage myelin disrupt this mechanism.",B:"Myelin is a passive insulator \u2014 it does not actively transport ions. It prevents ion leakage along the internodal segments so that current flows efficiently to the next node, where the action potential is regenerated by voltage-gated channels.",C:"The cell body (soma) initiates the action potential, but conduction along the axon is entirely self-propagating. The signal jumps between nodes of Ranvier based on where voltage-gated channels are concentrated \u2014 not through direct soma signaling.",D:"Dendrites receive incoming signals and conduct them toward the soma \u2014 they play no role in axonal conduction or saltatory conduction. The nodes of Ranvier, not dendrites, are the sites of action potential regeneration along myelinated axons."},
+  {ok:"Correct! During the absolute refractory period, voltage-gated Na\u207a channels are inactivated and physically cannot reopen regardless of stimulus strength. This enforces one-directional propagation and sets a ceiling on a neuron\u2019s maximum firing rate \u2014 critical for the temporal coding of information.",A:"You are thinking of the relative refractory period, which comes after the absolute refractory period. During the relative refractory period, a stronger-than-normal stimulus can trigger another action potential. But during the absolute refractory period, no stimulus can do so.",C:"Neurotransmitter release occurs at the synaptic terminal after the action potential arrives there \u2014 it is not what defines the refractory period. The absolute refractory period is the interval when Na\u207a channels are inactivated and the neuron cannot fire.",D:"Long-term potentiation (LTP) is a form of synaptic plasticity linked to memory and learning. It is entirely unrelated to the refractory period. During the absolute refractory period, the neuron simply cannot fire again because its Na\u207a channels are inactivated."},
+  {ok:"Correct! When the action potential reaches the presynaptic terminal, it opens voltage-gated Ca\u00b2\u207a channels. Ca\u00b2\u207a influx triggers synaptic vesicles to fuse with the membrane and release neurotransmitters into the synaptic cleft \u2014 the key step converting an electrical signal into a chemical one. Drugs that block Ca\u00b2\u207a channels at synapses can significantly alter neurotransmission.",A:"Voltage-gated K\u207a channels at the terminal contribute to repolarization of the membrane, but they do not trigger neurotransmitter release. It is specifically Ca\u00b2\u207a influx that signals vesicle exocytosis at the presynaptic terminal.",C:"AMPA receptors are located on the postsynaptic membrane and respond to glutamate after it has been released. They cannot initiate neurotransmitter release \u2014 they are activated by it. Exocytosis is always triggered on the presynaptic side by Ca\u00b2\u207a.",D:"Serotonin reuptake transporters recycle released neurotransmitters back into the presynaptic neuron \u2014 they are part of signal termination, not initiation. Neurotransmitter release is triggered by presynaptic Ca\u00b2\u207a influx, which occurs before any reuptake."}
+];
+
+var cur=0,score=0,sel=[];
+for(var z=0;z<6;z++)sel.push(null);
+
+function pick(q,i){
+  var fb=document.getElementById('fb'+q);
+  if(fb.classList.contains('show'))return;
+  sel[q]=i;
+  var opts=document.getElementById('s'+q).querySelectorAll('.opt');
+  for(var b=0;b<opts.length;b++)opts[b].classList.remove('selected');
+  opts[i].classList.add('selected');
+  document.getElementById('sb'+q).removeAttribute('disabled');
+}
+
+function check(q,correct){
+  if(sel[q]===null)return;
+  var isOk=sel[q]===correct;
+  if(isOk)score++;
+  var opts=document.getElementById('s'+q).querySelectorAll('.opt');
+  for(var b=0;b<opts.length;b++){
+    opts[b].setAttribute('disabled','');
+    opts[b].classList.remove('selected');
+    if(b===correct)opts[b].classList.add('correct');
+    else if(b===sel[q]&&!isOk)opts[b].classList.add('wrong');
+  }
+  var fb=document.getElementById('fb'+q);
+  fb.classList.add('show');
+  var label=String.fromCharCode(65+sel[q]);
+  var txt=isOk?FB[q].ok:(FB[q][label]||'Review the correct option above.');
+  fb.innerHTML='<div class="fb-head '+(isOk?'ok':'bad')+'">'+(isOk?'&#10003; Correct':'&#10007; Incorrect')+'</div><div class="fb-body">'+txt+'</div>';
+  var sbtn=document.getElementById('sb'+q);
+  sbtn.setAttribute('disabled','');
+  sbtn.textContent=isOk?'Correct!':'Incorrect';
+  var nb=document.createElement('button');
+  nb.className='btn btn-blue';
+  var isLast=q===5;
+  nb.textContent=isLast?'See results \u2192':'Next question \u2192';
+  nb.onclick=isLast?showResults:function(){goTo(cur+1);};
+  sbtn.parentNode.appendChild(nb);
+}
+
+function goTo(n){
+  document.getElementById('s'+cur).classList.remove('active');
+  cur=n;
+  document.getElementById('s'+cur).classList.add('active');
+  document.getElementById('qlabel').textContent='Question '+(cur+1)+' of 6';
+  document.getElementById('qscore').textContent='Score: '+score+' / 6';
+  document.getElementById('prog').style.width=Math.round((cur/6)*100)+'%';
+  window.scrollTo(0,0);
+}
+
+function showResults(){
+  document.getElementById('s5').classList.remove('active');
+  document.getElementById('sR').classList.add('active');
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('qlabel').textContent='Quiz complete';
+  document.getElementById('qscore').textContent='Final: '+score+' / 6';
+  var pct=Math.round((score/6)*100);
+  var grade=pct>=83?'Outstanding':pct>=67?'Proficient':pct>=50?'Developing':'Needs Review';
+  var remark=pct>=83?'Excellent command of neural transmission concepts.':pct>=67?'Good grasp \u2014 review a few concepts for full mastery.':pct>=50?'Foundational understanding present \u2014 more study recommended.':'Keep going \u2014 this material takes time to consolidate.';
+  document.getElementById('r-grade').textContent=grade;
+  document.getElementById('r-pct').textContent=pct+'%';
+  document.getElementById('r-remark').textContent=remark;
+  document.getElementById('r-ok').textContent=score;
+  document.getElementById('r-bad').textContent=6-score;
+  window.scrollTo(0,0);
+}
+
+function restart(){
+  cur=0;score=0;
+  for(var z=0;z<6;z++)sel[z]=null;
+  var screens=document.querySelectorAll('.screen');
+  for(var s=0;s<screens.length;s++)screens[s].classList.remove('active');
+  document.getElementById('s0').classList.add('active');
+  document.getElementById('qlabel').textContent='Question 1 of 6';
+  document.getElementById('qscore').textContent='Score: 0 / 6';
+  document.getElementById('prog').style.width='0%';
+  for(var q=0;q<6;q++){
+    var opts=document.getElementById('s'+q).querySelectorAll('.opt');
+    for(var b=0;b<opts.length;b++){opts[b].removeAttribute('disabled');opts[b].className='opt';}
+    var fb=document.getElementById('fb'+q);
+    fb.classList.remove('show');fb.innerHTML='';
+    var sbtn=document.getElementById('sb'+q);
+    sbtn.setAttribute('disabled','');sbtn.textContent='Check answer';
+    var row=sbtn.parentNode;
+    if(row.children.length>1)row.removeChild(row.children[1]);
+  }
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
