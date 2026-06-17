@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PsycheSim AI Interview Simulator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">Ψ</div>
+        <div>
+          <h1>PsycheSim</h1>
+          <p>AI Interview Simulator for Psychology Students</p>
+        </div>
+      </div>
+
+      <section class="panel">
+        <h2>Session Setup</h2>
+        <label for="caseSelect">Client case</label>
+        <select id="caseSelect"></select>
+
+        <label for="difficultySelect">Difficulty</label>
+        <select id="difficultySelect">
+          <option value="beginner">Beginner: direct answers</option>
+          <option value="intermediate" selected>Intermediate: partial disclosure</option>
+          <option value="advanced">Advanced: guarded or avoidant</option>
+        </select>
+
+        <label for="modeSelect">Mode</label>
+        <select id="modeSelect">
+          <option value="demo" selected>Demo mode: no API key</option>
+          <option value="openai">AI mode: OpenAI API key</option>
+        </select>
+
+        <div id="apiKeyBox" class="api-key-box hidden">
+          <label for="apiKey">OpenAI API key</label>
+          <input id="apiKey" type="password" placeholder="sk-..." autocomplete="off" />
+          <small>For local testing only. Do not publish keys in GitHub.</small>
+        </div>
+
+        <button id="startBtn" class="primary">Start New Interview</button>
+        <button id="endBtn" class="secondary" disabled>End Interview & Generate Feedback</button>
+      </section>
+
+      <section class="panel compact">
+        <h2>Student Goals</h2>
+        <ul>
+          <li>Build rapport</li>
+          <li>Explore presenting concern</li>
+          <li>Assess symptoms and functioning</li>
+          <li>Ask relevant risk questions</li>
+          <li>Summarize and close properly</li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="main">
+      <header class="session-header">
+        <div>
+          <h2 id="sessionTitle">Select a case and start.</h2>
+          <p id="sessionMeta">The AI will act as the client. Ask interview questions one at a time.</p>
+        </div>
+        <button id="exportBtn" class="ghost" disabled>Export Transcript</button>
+      </header>
+
+      <section id="chatWindow" class="chat-window">
+        <div class="empty-state">
+          <h3>Ready for interview practice</h3>
+          <p>Start a session, then conduct the intake interview as the psychology student.</p>
+        </div>
+      </section>
+
+      <form id="chatForm" class="chat-form">
+        <textarea id="studentInput" placeholder="Type your interview question here..." rows="2" disabled></textarea>
+        <button id="sendBtn" type="submit" disabled>Send</button>
+      </form>
+    </main>
+  </div>
+
+  <dialog id="feedbackDialog">
+    <div class="dialog-header">
+      <h2>Interview Feedback</h2>
+      <button id="closeFeedback" class="ghost">Close</button>
+    </div>
+    <div id="feedbackContent" class="feedback-content"></div>
+  </dialog>
+
+  <script src="cases.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
