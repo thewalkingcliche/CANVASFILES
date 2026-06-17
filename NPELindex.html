@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuroPsych Explorer Lab</title>
+  <link rel="stylesheet" href="NPELstyles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Physiological Psychology</p>
+      <h1>NeuroPsych Explorer Lab</h1>
+      <p class="subhead">Interactive brain–behavior simulator for physiological psychology learning activities.</p>
+    </div>
+    <div class="score-card">
+      <span>Learning Log</span>
+      <strong id="logCount">0</strong>
+      <small>entries recorded</small>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="App sections">
+    <button class="tab active" data-tab="brain">Brain–Behavior Map</button>
+    <button class="tab" data-tab="neuro">Neurotransmitters</button>
+    <button class="tab" data-tab="sleep">Sleep Simulator</button>
+    <button class="tab" data-tab="stress">Stress Simulator</button>
+    <button class="tab" data-tab="case">Case-to-Brain Mapper</button>
+    <button class="tab" data-tab="lesion">Lesion Explorer</button>
+    <button class="tab" data-tab="log">Learning Log</button>
+  </nav>
+
+  <main>
+    <section id="brain" class="panel active">
+      <div class="section-head">
+        <h2>Brain–Behavior Map</h2>
+        <p>Choose a brain region to examine its primary functions, behavioral links, and possible impairment effects.</p>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <label for="brainSelect">Brain area</label>
+          <select id="brainSelect"></select>
+          <button id="brainSave">Add to Learning Log</button>
+        </div>
+        <div class="card output" id="brainOutput"></div>
+      </div>
+    </section>
+
+    <section id="neuro" class="panel">
+      <div class="section-head">
+        <h2>Neurotransmitter Explorer</h2>
+        <p>Explore how neurotransmitters relate to arousal, reward, mood, movement, learning, and regulation.</p>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <label for="neuroSelect">Neurotransmitter</label>
+          <select id="neuroSelect"></select>
+          <button id="neuroSave">Add to Learning Log</button>
+        </div>
+        <div class="card output" id="neuroOutput"></div>
+      </div>
+    </section>
+
+    <section id="sleep" class="panel">
+      <div class="section-head">
+        <h2>Sleep Cycle Simulator</h2>
+        <p>Adjust sleep-related variables and observe likely effects on attention, mood, memory, and regulation.</p>
+      </div>
+      <div class="grid two">
+        <div class="card controls">
+          <label>Sleep duration: <span id="sleepHoursLabel">7</span> hours</label>
+          <input type="range" id="sleepHours" min="2" max="10" step="1" value="7" />
+
+          <label>Stress level: <span id="sleepStressLabel">3</span>/10</label>
+          <input type="range" id="sleepStress" min="0" max="10" step="1" value="3" />
+
+          <label>Caffeine timing</label>
+          <select id="caffeine">
+            <option value="none">No caffeine late in the day</option>
+            <option value="afternoon">Afternoon caffeine</option>
+            <option value="evening">Evening caffeine</option>
+          </select>
+
+          <label>Screen exposure before sleep</label>
+          <select id="screen">
+            <option value="low">Low</option>
+            <option value="moderate">Moderate</option>
+            <option value="high">High</option>
+          </select>
+          <button id="sleepSave">Add to Learning Log</button>
+        </div>
+        <div class="card output" id="sleepOutput"></div>
+      </div>
+    </section>
+
+    <section id="stress" class="panel">
+      <div class="section-head">
+        <h2>Stress Response Simulator</h2>
+        <p>Model short-term and sustained stress responses through sympathetic activation and HPA-axis involvement.</p>
+      </div>
+      <div class="grid two">
+        <div class="card controls">
+          <label>Stressor intensity: <span id="stressIntensityLabel">5</span>/10</label>
+          <input type="range" id="stressIntensity" min="0" max="10" value="5" />
+
+          <label>Duration</label>
+          <select id="stressDuration">
+            <option value="acute">Acute</option>
+            <option value="repeated">Repeated</option>
+            <option value="chronic">Chronic</option>
+          </select>
+
+          <label>Recovery support</label>
+          <select id="recovery">
+            <option value="strong">Strong recovery support</option>
+            <option value="moderate">Moderate recovery support</option>
+            <option value="low">Low recovery support</option>
+          </select>
+          <button id="stressSave">Add to Learning Log</button>
+        </div>
+        <div class="card output" id="stressOutput"></div>
+      </div>
+    </section>
+
+    <section id="case" class="panel">
+      <div class="section-head">
+        <h2>Case-to-Brain Mapper</h2>
+        <p>Interpret short physiological psychology cases by identifying likely systems and mechanisms.</p>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <button id="newCase">Generate Case</button>
+          <div id="caseText" class="scenario"></div>
+          <label for="caseChoice">Likely system involved</label>
+          <select id="caseChoice"></select>
+          <button id="checkCase">Check Mapping</button>
+          <button id="caseSave">Add to Learning Log</button>
+        </div>
+        <div class="card output" id="caseOutput"></div>
+      </div>
+    </section>
+
+    <section id="lesion" class="panel">
+      <div class="section-head">
+        <h2>Lesion Effect Explorer</h2>
+        <p>Select a damaged region and examine likely behavioral or cognitive effects.</p>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <label for="lesionSelect">Damaged area</label>
+          <select id="lesionSelect"></select>
+          <button id="lesionSave">Add to Learning Log</button>
+        </div>
+        <div class="card output" id="lesionOutput"></div>
+      </div>
+    </section>
+
+    <section id="log" class="panel">
+      <div class="section-head">
+        <h2>Learning Log</h2>
+        <p>Export student activity evidence for Canvas submission.</p>
+      </div>
+      <div class="card">
+        <label for="studentName">Student name</label>
+        <input type="text" id="studentName" placeholder="Enter name" />
+        <label for="reflection">Reflection</label>
+        <textarea id="reflection" placeholder="Explain one brain–behavior connection you learned."></textarea>
+        <div class="actions">
+          <button id="exportLog">Export Study Report</button>
+          <button id="clearLog" class="secondary">Clear Log</button>
+        </div>
+        <pre id="logOutput"></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>NeuroPsych Explorer Lab • Static Canvas/GitHub Pages app • No backend required</p>
+  </footer>
+
+  <script src="NPELdata.js"></script>
+  <script src="NPELapp.js"></script>
+</body>
+</html>
