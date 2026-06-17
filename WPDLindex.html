@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WorkPsych Decision Lab</title>
+  <link rel="stylesheet" href="WPDLstyles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="eyebrow">Industrial/Organizational Psychology</p>
+      <h1>WorkPsych Decision Lab</h1>
+      <p class="subtitle">Interactive I/O Psychology case simulator for applied reasoning, workplace diagnosis, and board-style decision-making.</p>
+      <div class="hero__stats">
+        <span><strong id="totalCases">100</strong> cases</span>
+        <span><strong id="answeredCount">0</strong> answered</span>
+        <span><strong id="scoreCount">0</strong> correct</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <button class="tab active" data-tab="cases">I/O Case Simulator</button>
+      <button class="tab" data-tab="job">Job Analysis Builder</button>
+      <button class="tab" data-tab="selection">Selection Designer</button>
+      <button class="tab" data-tab="training">Training Needs Simulator</button>
+      <button class="tab" data-tab="appraisal">Appraisal Error Trainer</button>
+      <button class="tab" data-tab="motivation">Motivation Matcher</button>
+      <button class="tab" data-tab="tracker">Readiness Tracker</button>
+      <button class="tab" data-tab="export">Export Report</button>
+    </aside>
+
+    <section class="panel active" id="cases">
+      <div class="panelHeader">
+        <div>
+          <h2>I/O Case Simulator</h2>
+          <p>Choose the best I/O decision. Review the rationale and distractor explanations.</p>
+        </div>
+        <button class="primary" id="randomCaseBtn">Random Case</button>
+      </div>
+      <div class="filters">
+        <label>Topic <select id="topicFilter"><option value="All">All</option></select></label>
+        <label>Difficulty <select id="difficultyFilter"><option value="All">All</option><option>Easy</option><option>Moderate</option><option>Difficult</option></select></label>
+        <label>Mode <select id="modeFilter"><option value="All">All</option><option>Practice</option><option>Board</option><option>Applied</option></select></label>
+      </div>
+      <article class="card caseCard">
+        <div class="caseMeta"><span id="caseNumber"></span><span id="caseTopic"></span><span id="caseDifficulty"></span></div>
+        <h3 id="caseTitle"></h3>
+        <p id="caseStem"></p>
+        <div id="options" class="options"></div>
+        <div class="actions">
+          <button class="primary" id="checkAnswerBtn">Check Answer</button>
+          <button class="secondary" id="nextCaseBtn">Next</button>
+        </div>
+        <div id="caseFeedback" class="feedback hidden"></div>
+      </article>
+    </section>
+
+    <section class="panel" id="job">
+      <h2>Job Analysis Builder</h2>
+      <p>Generate a basic job analysis matrix for common applied psychology and workplace roles.</p>
+      <div class="grid two">
+        <div class="card">
+          <label>Choose a role
+            <select id="jobRole"></select>
+          </label>
+          <label>Primary purpose
+            <select id="jobPurpose">
+              <option>Hiring and selection</option>
+              <option>Training design</option>
+              <option>Performance appraisal</option>
+              <option>Workload review</option>
+              <option>Role clarification</option>
+            </select>
+          </label>
+          <button class="primary" id="buildJobBtn">Build Job Analysis</button>
+        </div>
+        <div class="card output" id="jobOutput"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="selection">
+      <h2>Selection System Designer</h2>
+      <p>Build a defensible selection system by combining job-relevant methods.</p>
+      <div class="card">
+        <label>Role type
+          <select id="selectionRole">
+            <option>Customer service representative</option>
+            <option>Teacher</option>
+            <option>HR assistant</option>
+            <option>Sales associate</option>
+            <option>Team leader</option>
+            <option>Psychometrician assistant</option>
+          </select>
+        </label>
+        <div class="checkGrid" id="selectionMethods"></div>
+        <button class="primary" id="evaluateSelectionBtn">Evaluate System</button>
+      </div>
+      <div class="card output" id="selectionOutput"></div>
+    </section>
+
+    <section class="panel" id="training">
+      <h2>Training Needs Simulator</h2>
+      <p>Diagnose whether a performance gap requires training or another intervention.</p>
+      <div class="card">
+        <label>Observed problem
+          <select id="trainingProblem"></select>
+        </label>
+        <label>Most likely root cause
+          <select id="trainingCause">
+            <option>Knowledge gap</option>
+            <option>Skill gap</option>
+            <option>Motivation issue</option>
+            <option>Resource constraint</option>
+            <option>Supervisor or feedback problem</option>
+            <option>Job design problem</option>
+          </select>
+        </label>
+        <button class="primary" id="trainingBtn">Get Recommendation</button>
+      </div>
+      <div class="card output" id="trainingOutput"></div>
+    </section>
+
+    <section class="panel" id="appraisal">
+      <div class="panelHeader">
+        <div>
+          <h2>Appraisal Error Trainer</h2>
+          <p>Identify common rating errors in performance appraisal situations.</p>
+        </div>
+        <button class="primary" id="newAppraisalBtn">New Item</button>
+      </div>
+      <article class="card">
+        <p id="appraisalStem"></p>
+        <div id="appraisalOptions" class="options compact"></div>
+        <button class="primary" id="checkAppraisalBtn">Check</button>
+        <div id="appraisalFeedback" class="feedback hidden"></div>
+      </article>
+    </section>
+
+    <section class="panel" id="motivation">
+      <div class="panelHeader">
+        <div>
+          <h2>Motivation Theory Matcher</h2>
+          <p>Match workplace behavior to motivation theories and concepts.</p>
+        </div>
+        <button class="primary" id="newMotivationBtn">New Item</button>
+      </div>
+      <article class="card">
+        <p id="motivationStem"></p>
+        <div id="motivationOptions" class="options compact"></div>
+        <button class="primary" id="checkMotivationBtn">Check</button>
+        <div id="motivationFeedback" class="feedback hidden"></div>
+      </article>
+    </section>
+
+    <section class="panel" id="tracker">
+      <h2>Readiness Tracker</h2>
+      <p>Topic mastery is based on answered items in this browser session.</p>
+      <div class="card" id="trackerOutput"></div>
+      <button class="secondary" id="resetBtn">Reset Progress</button>
+    </section>
+
+    <section class="panel" id="export">
+      <h2>Export Student Report</h2>
+      <p>Copy a summary of completed work, scores, and missed topics.</p>
+      <div class="card output" id="exportOutput"></div>
+      <button class="primary" id="copyReportBtn">Copy Report</button>
+    </section>
+  </main>
+
+  <script src="WPDLdata.js"></script>
+  <script src="WPDLapp.js"></script>
+</body>
+</html>
