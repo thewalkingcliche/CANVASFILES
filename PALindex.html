@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Psych Assessment Lab</title>
+  <link rel="stylesheet" href="PALstyles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Psychological Assessment Course App</p>
+      <h1>Psych Assessment Lab</h1>
+      <p class="subtitle">Interactive test selection, score interpretation, ethics checking, item analysis, and report-writing practice.</p>
+    </div>
+    <div class="hero-card">
+      <span>Learning Progress</span>
+      <strong id="progressText">0 activities completed</strong>
+      <div class="progress"><div id="progressBar"></div></div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="App sections">
+    <button class="tab active" data-tab="selector">Assessment Selector</button>
+    <button class="tab" data-tab="scores">Score Interpreter</button>
+    <button class="tab" data-tab="cases">Case Lab</button>
+    <button class="tab" data-tab="ethics">Ethics Checker</button>
+    <button class="tab" data-tab="items">Item Analysis</button>
+    <button class="tab" data-tab="report">Report Builder</button>
+    <button class="tab" data-tab="log">Learning Log</button>
+  </nav>
+
+  <main>
+    <section id="selector" class="panel active">
+      <div class="section-head">
+        <h2>Assessment Selector</h2>
+        <p>Choose the assessment purpose and the app will recommend appropriate assessment methods.</p>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <label>Assessment purpose</label>
+          <select id="purposeSelect"></select>
+          <label>Primary construct</label>
+          <select id="constructSelect"></select>
+          <label>Client population</label>
+          <select id="populationSelect"></select>
+          <label>Decision stakes</label>
+          <select id="stakesSelect">
+            <option>Low-stakes screening</option>
+            <option>Moderate-stakes intervention planning</option>
+            <option>High-stakes placement or diagnostic decision</option>
+          </select>
+          <button id="runSelector">Recommend Assessment Plan</button>
+        </div>
+        <div class="result" id="selectorResult">
+          <h3>Recommendation</h3>
+          <p>Complete the fields and generate an assessment plan.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="scores" class="panel">
+      <div class="section-head">
+        <h2>Score Interpreter</h2>
+        <p>Convert raw scores into z-scores, T-scores, percentile estimates, and cautious interpretation statements.</p>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <label>Raw score</label>
+          <input type="number" id="rawScore" value="72" />
+          <label>Norm mean</label>
+          <input type="number" id="meanScore" value="60" />
+          <label>Norm standard deviation</label>
+          <input type="number" id="sdScore" value="10" />
+          <label>Test construct</label>
+          <input type="text" id="scoreConstruct" value="Anxiety symptoms" />
+          <button id="interpretScore">Interpret Score</button>
+        </div>
+        <div class="result" id="scoreResult">
+          <h3>Score Interpretation</h3>
+          <p>Enter score information to generate an interpretation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="cases" class="panel">
+      <div class="section-head">
+        <h2>Assessment Case Lab</h2>
+        <p>Analyze short psychological assessment scenarios and compare your reasoning with a model response.</p>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <button id="newCase">Generate Case</button>
+          <div id="caseBox" class="case-box"></div>
+          <label>Main assessment issue</label>
+          <textarea id="caseIssue" placeholder="Identify the central assessment problem..."></textarea>
+          <label>Recommended next step</label>
+          <textarea id="casePlan" placeholder="State what should be done next..."></textarea>
+          <button id="checkCase">Check Reasoning</button>
+        </div>
+        <div class="result" id="caseResult">
+          <h3>Case Feedback</h3>
+          <p>Generate a case and submit your reasoning.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ethics" class="panel">
+      <div class="section-head">
+        <h2>Ethics and Test Use Checker</h2>
+        <p>Check whether a proposed assessment practice is acceptable, risky, or inappropriate.</p>
+      </div>
+      <div class="card checklist">
+        <label><input type="checkbox" class="ethic" value="consent"> Informed consent was obtained.</label>
+        <label><input type="checkbox" class="ethic" value="qualified"> The examiner is qualified to administer and interpret the tool.</label>
+        <label><input type="checkbox" class="ethic" value="relevant"> The test is relevant to the referral question.</label>
+        <label><input type="checkbox" class="ethic" value="valid"> Validity evidence supports the intended use.</label>
+        <label><input type="checkbox" class="ethic" value="reliable"> Reliability evidence is adequate.</label>
+        <label><input type="checkbox" class="ethic" value="norms"> Norms are appropriate for the examinee.</label>
+        <label><input type="checkbox" class="ethic" value="multiple"> Multiple sources of data are used.</label>
+        <label><input type="checkbox" class="ethic" value="confidentiality"> Confidentiality and record handling are clear.</label>
+        <button id="runEthics">Evaluate Ethical Risk</button>
+      </div>
+      <div class="result wide" id="ethicsResult">
+        <h3>Ethics Result</h3>
+        <p>Select the conditions that apply.</p>
+      </div>
+    </section>
+
+    <section id="items" class="panel">
+      <div class="section-head">
+        <h2>Item Analysis Trainer</h2>
+        <p>Compute item difficulty and discrimination from upper and lower group performance.</p>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <label>Upper group correct</label>
+          <input type="number" id="upperCorrect" value="18" />
+          <label>Upper group total</label>
+          <input type="number" id="upperTotal" value="25" />
+          <label>Lower group correct</label>
+          <input type="number" id="lowerCorrect" value="9" />
+          <label>Lower group total</label>
+          <input type="number" id="lowerTotal" value="25" />
+          <button id="analyzeItem">Analyze Item</button>
+        </div>
+        <div class="result" id="itemResult">
+          <h3>Item Analysis</h3>
+          <p>Enter upper and lower group values.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="report" class="panel">
+      <div class="section-head">
+        <h2>Brief Assessment Report Builder</h2>
+        <p>Create a concise assessment summary using cautious, evidence-based wording.</p>
+      </div>
+      <div class="grid two">
+        <div class="card">
+          <label>Referral question</label>
+          <textarea id="referral" placeholder="Why was the client referred?"></textarea>
+          <label>Data sources</label>
+          <textarea id="sources" placeholder="Interview, observation, test results, records..."></textarea>
+          <label>Key findings</label>
+          <textarea id="findings" placeholder="Summarize major findings..."></textarea>
+          <label>Limitations</label>
+          <textarea id="limitations" placeholder="State limitations in the assessment..."></textarea>
+          <button id="buildReport">Generate Summary</button>
+        </div>
+        <div class="result" id="reportResult">
+          <h3>Draft Summary</h3>
+          <p>Complete the fields to generate a report-style summary.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="log" class="panel">
+      <div class="section-head">
+        <h2>Learning Log</h2>
+        <p>Export student activity evidence for Canvas submission.</p>
+      </div>
+      <div class="card">
+        <button id="copyLog">Copy Learning Log</button>
+        <button id="clearLog" class="secondary">Clear Log</button>
+        <pre id="logBox"></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Psych Assessment Lab | Static Canvas-ready app | No backend or API key required</p>
+  </footer>
+
+  <script src="PALdata.js"></script>
+  <script src="PALapp.js"></script>
+</body>
+</html>
