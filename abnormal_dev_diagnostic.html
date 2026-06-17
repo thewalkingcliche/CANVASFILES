@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Diagnostic Reasoning — Abnormal & Developmental Psychology</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#f0f4f8;color:#1a1a2e;padding:16px}
+.wrap{max-width:760px;margin:0 auto}
+.screen{display:none}.screen.active{display:block}
+
+/* Home */
+.card{background:#fff;border-radius:12px;padding:26px 22px;box-shadow:0 2px 12px rgba(0,0,0,.1);margin-bottom:14px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7B3FA0;margin-bottom:6px}
+h1{font-size:21px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.sub{font-size:13px;color:#666;line-height:1.6;margin-bottom:22px}
+
+/* Mode grid */
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px}
+.mode-card{border:2px solid #d0d7e0;border-radius:12px;padding:18px;cursor:pointer;transition:border-color .2s,background .2s;background:#f7f9fc;text-align:center}
+.mode-card:hover{border-color:#7B3FA0;background:#F5EEFF}
+.mode-icon{font-size:30px;margin-bottom:8px}
+.mode-title{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:3px}
+.mode-desc{font-size:12px;color:#666;line-height:1.5}
+
+/* Case selector */
+.cases-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.case-btn{border:2px solid #d0d7e0;border-radius:10px;padding:14px;cursor:pointer;background:#f7f9fc;text-align:left;transition:border-color .2s,background .2s}
+.case-btn:hover{border-color:#7B3FA0;background:#F5EEFF}
+.case-age{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#7B3FA0;margin-bottom:3px}
+.case-name{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:2px}
+.case-hint{font-size:12px;color:#888}
+.case-btn.done{border-color:#0F6E56;background:#E1F5EE}
+.case-btn.done .case-age{color:#0F6E56}
+
+/* Chat */
+.chat-wrap{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);overflow:hidden}
+.chat-header{background:#7B3FA0;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.hdr-avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hdr-info{flex:1}
+.hdr-name{font-size:14px;font-weight:700}
+.hdr-sub{font-size:11px;opacity:.8}
+.hdr-badge{font-size:11px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;white-space:nowrap}
+.prog-bar{height:4px;background:rgba(255,255,255,.25)}
+.prog-fill{height:4px;background:#fff;transition:width .4s}
+
+/* Vignette box */
+.vignette-box{margin:14px 14px 0;background:#F5EEFF;border:1px solid #d4b3f0;border-radius:10px;padding:14px 16px}
+.vig-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#7B3FA0;margin-bottom:6px}
+.vig-text{font-size:13px;line-height:1.7;color:#1a1a2e}
+
+/* Messages */
+.messages{padding:14px;min-height:280px;max-height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:#f7f9fc}
+.msg{display:flex;gap:9px;align-items:flex-start;max-width:90%}
+.msg.ai{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px}
+.msg.ai .msg-av{background:#7B3FA0;color:#fff}
+.msg.user .msg-av{background:#185FA5;color:#fff}
+.bubble{padding:9px 13px;border-radius:12px;font-size:14px;line-height:1.6;color:#1a1a2e;white-space:pre-wrap}
+.msg.ai .bubble{background:#fff;border:1px solid #d0d7e0;border-top-left-radius:2px}
+.msg.user .bubble{background:#185FA5;color:#fff;border-top-right-radius:2px}
+.bubble.typing{color:#999;font-style:italic}
+.bubble.hint{background:#FFF8E1;border:1px solid #FFE082;color:#5D4037;font-size:13px;border-top-left-radius:2px}
+
+/* Input */
+.input-area{padding:12px 14px;background:#fff;border-top:1px solid #e8e0f0;display:flex;gap:8px;align-items:flex-end}
+textarea{flex:1;border:1.5px solid #d0d7e0;border-radius:8px;padding:9px 11px;font-size:14px;font-family:Arial,sans-serif;resize:none;outline:none;line-height:1.5;color:#1a1a2e;background:#f7f9fc;min-height:42px;max-height:110px}
+textarea:focus{border-color:#7B3FA0;background:#fff}
+textarea:disabled{opacity:.5;cursor:not-allowed}
+.send-btn{padding:9px 16px;background:#7B3FA0;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;flex-shrink:0}
+.send-btn:hover:not(:disabled){background:#5C2D7A}
+.send-btn:disabled{background:#b0bec5;cursor:default}
+.action-bar{padding:10px 14px;background:#fff;border-top:1px solid #e8e0f0;display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:background .15s}
+.btn-purple{background:#7B3FA0;color:#fff}.btn-purple:hover{background:#5C2D7A}
+.btn-gray{background:#e8e0f0;color:#444}.btn-gray:hover{background:#d4c8e8}
+.btn-green{background:#0F6E56;color:#fff}.btn-green:hover{background:#085041}
+
+/* Summary */
+.summary-card{background:#fff;border-radius:12px;padding:24px 20px;box-shadow:0 2px 12px rgba(0,0,0,.1);text-align:center}
+.sum-icon{font-size:44px;margin-bottom:10px}
+.sum-title{font-size:19px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.sum-sub{font-size:13px;color:#666;margin-bottom:20px;line-height:1.6}
+.sum-box{background:#f7f9fc;border:1px solid #d0d7e0;border-radius:10px;padding:14px 16px;margin-bottom:16px;text-align:left;font-size:13px;line-height:1.7;color:#1a1a2e}
+.sum-box h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#7B3FA0;margin-bottom:8px}
+.case-progress{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.cp-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid #d0d7e0;background:#f7f9fc}
+.cp-dot.done{background:#E1F5EE;border-color:#0F6E56}
+
+@media(max-width:500px){
+  .mode-grid,.cases-grid{grid-template-columns:1fr}
+  body{padding:10px}
+  .messages{max-height:320px}
+  h1{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- SCREEN: Home -->
+<div class="screen active" id="sc-home">
+  <div class="card">
+    <div class="eyebrow">Abnormal & Developmental Psychology</div>
+    <h1>Diagnostic Reasoning Chatbot</h1>
+    <p class="sub">Practice clinical thinking across the lifespan. Work through 5 real-world case vignettes and reason through diagnoses with an AI clinical supervisor. Choose your learning mode below.</p>
+    <div class="mode-grid">
+      <div class="mode-card" onclick="setMode('vignette')">
+        <div class="mode-icon">📄</div>
+        <div class="mode-title">Vignette Mode</div>
+        <div class="mode-desc">Read a full case and discuss your diagnostic impressions with the AI supervisor.</div>
+      </div>
+      <div class="mode-card" onclick="setMode('inquiry')">
+        <div class="mode-icon">🔍</div>
+        <div class="mode-title">Inquiry Mode</div>
+        <div class="mode-desc">AI reveals symptoms one at a time. You ask clarifying questions to build your diagnosis.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: Case select -->
+<div class="screen" id="sc-cases">
+  <div class="card">
+    <div class="eyebrow" id="mode-label">Vignette Mode</div>
+    <h1>Select a Case</h1>
+    <p class="sub" id="cases-sub">Read the case vignette and reason through the diagnosis with the AI clinical supervisor.</p>
+    <div class="cases-grid" id="cases-grid"></div>
+  </div>
+</div>
+
+<!-- SCREEN: Chat -->
+<div class="screen" id="sc-chat">
+  <div class="chat-wrap">
+    <div class="chat-header">
+      <div class="hdr-avatar">🧠</div>
+      <div class="hdr-info">
+        <div class="hdr-name">Dr. Villanueva — Clinical Supervisor</div>
+        <div class="hdr-sub" id="chat-case-label">Case 1</div>
+      </div>
+      <div class="hdr-badge" id="chat-mode-badge">Vignette</div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="chat-prog" style="width:0%"></div></div>
+    <div id="vignette-box"></div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+      <textarea id="user-input" placeholder="Share your diagnostic impression or ask a question..." rows="1" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMsg()">Send</button>
+    </div>
+    <div class="action-bar">
+      <button class="btn btn-gray" onclick="getHint()">💡 Get a hint</button>
+      <button class="btn btn-green" onclick="revealDx()">✓ Reveal diagnosis</button>
+      <button class="btn btn-gray" onclick="goToCases()">← Back to cases</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: Case complete -->
+<div class="screen" id="sc-done">
+  <div class="summary-card">
+    <div class="sum-icon">✅</div>
+    <div class="sum-title" id="done-title">Case Complete</div>
+    <div class="sum-sub" id="done-sub"></div>
+    <div class="sum-box">
+      <h3>Clinical Supervisor Feedback</h3>
+      <div id="done-feedback">Generating feedback...</div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-purple" onclick="goToCases()">Try another case</button>
+      <button class="btn btn-gray" onclick="restart()">Start over</button>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+var CASES = [
+  {
+    id:0, name:'Liam, Age 7', age:'Childhood', emoji:'🧒',
+    hint:'Early onset, school setting, multiple domains affected.',
+    vignette:'Liam is a 7-year-old boy referred by his Grade 1 teacher. He has difficulty staying seated, frequently interrupts classmates, and cannot complete tasks without being redirected multiple times. His mother reports he has always been "on the go" since toddlerhood and has trouble following multi-step instructions at home. He is bright and creative but his grades are slipping. No major medical history. Symptoms are present in both school and home settings.',
+    dx:'Attention-Deficit/Hyperactivity Disorder (ADHD), Combined Presentation (DSM-5: 314.01)',
+    keyPoints:'Symptoms present before age 12, in two or more settings, causing functional impairment. Combined presentation because both inattentive and hyperactive-impulsive symptoms are prominent.'
+  },
+  {
+    id:1, name:'Sofia, Age 4', age:'Early Childhood', emoji:'👧',
+    hint:'Communication and social interaction are key areas to explore.',
+    vignette:'Sofia is a 4-year-old girl brought in by her parents who are concerned she is "in her own world." She does not respond to her name consistently, rarely makes eye contact, and has not developed phrase speech — she uses about 10 single words. She becomes very distressed when her daily routine is changed. She lines up her toy cars repetitively and becomes inconsolable if they are moved. She does not engage in pretend play and shows little interest in other children.',
+    dx:'Autism Spectrum Disorder (ASD), Level 2 — Requiring Substantial Support (DSM-5: 299.00)',
+    keyPoints:'Persistent deficits in social communication, restricted repetitive behaviors, symptoms present in early developmental period, causing significant functional impairment. Severity level based on support needed.'
+  },
+  {
+    id:2, name:'Marco, Age 16', age:'Adolescence', emoji:'🧑',
+    hint:'Consider mood, duration, and how adolescent presentations differ from adult ones.',
+    vignette:'Marco is a 16-year-old high school student referred by his school guidance counselor. Over the past 6 weeks he has been increasingly withdrawn, skipping lunch with friends, and submitting fewer assignments. His parents note he sleeps 11–12 hours but still feels tired. He has lost 4 kg without dieting. In session, he reports feeling "empty and useless" and says he no longer enjoys basketball, which he used to love. He denies suicidal ideation but says "sometimes I wonder what the point is." No manic episodes. No substance use.',
+    dx:'Major Depressive Disorder (MDD), Moderate Severity (DSM-5: 296.22)',
+    keyPoints:'Five or more depressive symptoms for at least 2 weeks, including depressed mood and loss of interest (anhedonia). Moderate severity due to functional impairment across school and social domains. Adolescent presentations may include irritability and somatic complaints.'
+  },
+  {
+    id:3, name:'Cora, Age 34', age:'Adulthood', emoji:'👩',
+    hint:'Consider the episodic nature, the full range of mood states, and occupational impact.',
+    vignette:'Cora is a 34-year-old marketing professional. She presents after a recent episode in which she slept only 2–3 hours per night for 10 days, launched three new business ventures simultaneously, maxed out two credit cards, and told colleagues she had "discovered the secret to success." She was extremely talkative and felt her thoughts were racing. She now feels deeply ashamed, is unable to go to work, and has been sleeping 14 hours a day for the past 2 weeks. Her husband reports this is her third similar cycle in 5 years. No psychotic features. No substance use.',
+    dx:'Bipolar I Disorder, Most Recent Episode Depressed (DSM-5: 296.51)',
+    keyPoints:'History of at least one manic episode lasting 10 days with decreased need for sleep, grandiosity, impulsivity, and pressured speech — causing marked occupational and financial impairment. Current depressive episode follows the manic phase. Cyclical pattern over 5 years.'
+  },
+  {
+    id:4, name:'Ernesto, Age 71', age:'Late Adulthood', emoji:'👴',
+    hint:'Consider age of onset, cognitive trajectory, and how it differs from normal aging.',
+    vignette:'Ernesto is a 71-year-old retired teacher brought in by his daughter. Over the past 18 months, she has noticed he repeatedly asks the same questions within minutes, forgets the names of grandchildren he used to be close to, and recently got lost driving to his own church. He left the stove on twice last month. His daughter says his personality has also changed — he was always warm and patient but has become irritable and occasionally suspicious. On the Mini-Mental State Examination he scores 19/30. His physician has ruled out reversible causes (thyroid, B12, medications).',
+    dx:'Major Neurocognitive Disorder (Dementia) Due to Alzheimer\'s Disease, Moderate Stage (DSM-5: 331.0)',
+    keyPoints:'Significant cognitive decline from a previous level of functioning in multiple domains (memory, orientation, executive function). Gradual onset and progressive decline. Behavioral changes (irritability, suspiciousness) are common in moderate-stage Alzheimer\'s. MMSE of 19 is consistent with moderate impairment.'
+  }
+];
+
+var mode = 'vignette';
+var currentCase = null;
+var history = [];
+var doneCases = [];
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('sc-home').classList.remove('active');
+  document.getElementById('sc-cases').classList.add('active');
+  document.getElementById('mode-label').textContent = m === 'vignette' ? 'Vignette Mode' : 'Inquiry Mode';
+  document.getElementById('cases-sub').textContent = m === 'vignette'
+    ? 'Read the full case and discuss your diagnostic impressions with the AI clinical supervisor.'
+    : 'The AI will reveal symptoms gradually. Ask questions to build your diagnosis.';
+  renderCaseGrid();
+}
+
+function renderCaseGrid() {
+  var g = document.getElementById('cases-grid');
+  g.innerHTML = '';
+  CASES.forEach(function(c) {
+    var btn = document.createElement('div');
+    btn.className = 'case-btn' + (doneCases.indexOf(c.id) >= 0 ? ' done' : '');
+    btn.innerHTML = '<div class="case-age">' + c.emoji + ' ' + c.age + '</div>'
+      + '<div class="case-name">' + c.name + '</div>'
+      + '<div class="case-hint">' + (doneCases.indexOf(c.id) >= 0 ? '✓ Completed' : 'Click to begin') + '</div>';
+    btn.onclick = function(){ startCase(c.id); };
+    g.appendChild(btn);
+  });
+}
+
+function startCase(id) {
+  currentCase = CASES[id];
+  history = [];
+  document.getElementById('sc-cases').classList.remove('active');
+  document.getElementById('sc-chat').classList.add('active');
+  document.getElementById('messages').innerHTML = '';
+  document.getElementById('chat-case-label').textContent = currentCase.name;
+  document.getElementById('chat-mode-badge').textContent = mode === 'vignette' ? 'Vignette' : 'Inquiry';
+  document.getElementById('chat-prog').style.width = '0%';
+  setInput(false);
+
+  if (mode === 'vignette') {
+    document.getElementById('vignette-box').innerHTML =
+      '<div class="vignette-box"><div class="vig-label">📋 Case Vignette — ' + currentCase.name + '</div>'
+      + '<div class="vig-text">' + currentCase.vignette + '</div></div>';
+    var opener = 'Good morning. I\'m Dr. Villanueva, your clinical supervisor. Please take a moment to review the case of ' + currentCase.name + '. When you\'re ready, share your initial diagnostic impression — what stands out to you, what diagnosis are you considering, and what DSM-5 criteria support your thinking?';
+    addMsg('ai', opener);
+    history.push({role:'assistant', content: opener});
+    setInput(true);
+  } else {
+    document.getElementById('vignette-box').innerHTML = '';
+    var inquiryOpener = 'Welcome to inquiry mode. You have a new referral — I\'ll give you information one piece at a time as you ask. Let\'s start: your patient is ' + currentCase.name + '. What would you like to know first?';
+    addMsg('ai', inquiryOpener);
+    history.push({role:'assistant', content: inquiryOpener});
+    setInput(true);
+  }
+}
+
+function getSystemPrompt() {
+  var base = 'You are Dr. Villanueva, a warm but rigorous clinical supervisor in a Philippine university psychology training clinic. You are guiding a student through a diagnostic reasoning exercise about ' + currentCase.name + '.';
+  if (mode === 'vignette') {
+    return base + ' The student has read this case vignette: "' + currentCase.vignette + '". Guide them using Socratic questioning — ask follow-up questions, probe their reasoning, correct misconceptions gently, and reference DSM-5 criteria. The correct diagnosis is ' + currentCase.dx + '. Key teaching points: ' + currentCase.keyPoints + '. Do not reveal the diagnosis unless the student is very close or asks directly. Keep responses to 3–5 sentences. Use Filipino clinical context where relevant.';
+  } else {
+    return base + ' You are running an inquiry-based exercise. The student must ask you questions to uncover symptoms. Here is all the case information you can draw from: "' + currentCase.vignette + '". Answer only what the student asks — reveal details gradually, one or two pieces at a time. If they ask something not covered, say the information is not available. After 6–8 exchanges, begin nudging them toward a diagnosis. The correct diagnosis is ' + currentCase.dx + '. Key teaching points: ' + currentCase.keyPoints + '. Keep responses to 2–4 sentences. Use Filipino clinical context where relevant.';
+  }
+}
+
+function sendMsg() {
+  var inp = document.getElementById('user-input');
+  var txt = inp.value.trim();
+  if (!txt) return;
+  inp.value = ''; autoResize(inp);
+  setInput(false);
+  addMsg('user', txt);
+  history.push({role:'user', content: txt});
+  callAI(function(reply){
+    addMsg('ai', reply);
+    history.push({role:'assistant', content: reply});
+    var pct = Math.min(history.length * 8, 90);
+    document.getElementById('chat-prog').style.width = pct + '%';
+    setInput(true);
+    document.getElementById('user-input').focus();
+  });
+}
+
+function getHint() {
+  setInput(false);
+  var hintMsg = '[The student is asking for a hint. Give one gentle Socratic hint about ' + currentCase.hint + ' without revealing the diagnosis. One sentence only.]';
+  var msgs = history.concat([{role:'user', content: hintMsg}]);
+  addTyping();
+  fetchAI(getSystemPrompt(), msgs, function(reply){
+    removeTyping();
+    var wrap = document.createElement('div');
+    wrap.className = 'msg ai';
+    wrap.style.maxWidth = '90%';
+    var av = document.createElement('div');
+    av.className = 'msg-av';
+    av.textContent = '💡';
+    av.style.background = '#B85C00';
+    var bub = document.createElement('div');
+    bub.className = 'bubble hint';
+    bub.textContent = reply;
+    wrap.appendChild(av); wrap.appendChild(bub);
+    document.getElementById('messages').appendChild(wrap);
+    document.getElementById('messages').scrollTop = 99999;
+    setInput(true);
+  });
+}
+
+function revealDx() {
+  setInput(false);
+  document.getElementById('chat-prog').style.width = '100%';
+  var revMsg = 'Thank you for working through this case. The diagnosis for ' + currentCase.name + ' is: ' + currentCase.dx + '.\n\nKey teaching points: ' + currentCase.keyPoints + '\n\nReflect on how your reasoning compared. What clues did you catch? What did you miss?';
+  addMsg('ai', revMsg);
+  history.push({role:'assistant', content: revMsg});
+  if (doneCases.indexOf(currentCase.id) < 0) doneCases.push(currentCase.id);
+  setTimeout(function(){ showDone(); }, 800);
+}
+
+function showDone() {
+  document.getElementById('sc-chat').classList.remove('active');
+  document.getElementById('sc-done').classList.add('active');
+  document.getElementById('done-title').textContent = currentCase.name + ' — Case Complete';
+  document.getElementById('done-sub').textContent = 'You worked through the case of ' + currentCase.name + ' (' + currentCase.age + '). The diagnosis is: ' + currentCase.dx + '.';
+  document.getElementById('done-feedback').textContent = 'Generating feedback...';
+  var fbPrompt = 'Based on this diagnostic reasoning session for the case of ' + currentCase.name + ', write a 4–5 sentence clinical supervisor feedback for the student. Cover: (1) quality of their diagnostic reasoning, (2) which DSM-5 criteria they identified well or missed, (3) a developmental psychopathology insight specific to this age group, and (4) one concrete suggestion for improvement. Be warm, constructive, and use Filipino clinical training context. The correct diagnosis was: ' + currentCase.dx + '. Key points: ' + currentCase.keyPoints;
+  fetchAI(getSystemPrompt(), history.concat([{role:'user', content: fbPrompt}]), function(fb){
+    document.getElementById('done-feedback').textContent = fb;
+  });
+}
+
+function callAI(cb) {
+  addTyping();
+  fetchAI(getSystemPrompt(), history, function(reply){
+    removeTyping();
+    cb(reply);
+  });
+}
+
+function fetchAI(sys, msgs, cb) {
+  fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:1000, system: sys, messages: msgs})
+  }).then(function(r){return r.json();}).then(function(data){
+    var txt = (data.content||[]).map(function(b){return b.text||'';}).join('').trim();
+    cb(txt);
+  }).catch(function(){
+    removeTyping();
+    addMsg('ai','Connection error. Please try again.');
+    setInput(true);
+  });
+}
+
+function addMsg(type, text) {
+  var msgs = document.getElementById('messages');
+  var wrap = document.createElement('div');
+  wrap.className = 'msg ' + (type==='ai'?'ai':'user');
+  var av = document.createElement('div');
+  av.className = 'msg-av';
+  av.textContent = type==='ai' ? '🧠' : '👤';
+  var bub = document.createElement('div');
+  bub.className = 'bubble';
+  bub.textContent = text;
+  wrap.appendChild(av); wrap.appendChild(bub);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = 99999;
+}
+
+function addTyping() {
+  var msgs = document.getElementById('messages');
+  var wrap = document.createElement('div');
+  wrap.className = 'msg ai'; wrap.id = 'typing';
+  var av = document.createElement('div'); av.className = 'msg-av'; av.textContent = '🧠';
+  var bub = document.createElement('div'); bub.className = 'bubble typing'; bub.textContent = 'Dr. Villanueva is thinking…';
+  wrap.appendChild(av); wrap.appendChild(bub);
+  msgs.appendChild(wrap); msgs.scrollTop = 99999;
+}
+
+function removeTyping() {
+  var t = document.getElementById('typing');
+  if (t) t.parentNode.removeChild(t);
+}
+
+function setInput(on) {
+  document.getElementById('user-input').disabled = !on;
+  document.getElementById('send-btn').disabled = !on;
+}
+
+function handleKey(e) {
+  if (e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); }
+}
+
+function autoResize(el) {
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,110)+'px';
+}
+
+function goToCases() {
+  document.getElementById('sc-chat').classList.remove('active');
+  document.getElementById('sc-done').classList.remove('active');
+  document.getElementById('sc-cases').classList.add('active');
+  renderCaseGrid();
+}
+
+function restart() {
+  doneCases=[]; currentCase=null; history=[];
+  document.getElementById('sc-done').classList.remove('active');
+  document.getElementById('sc-cases').classList.remove('active');
+  document.getElementById('sc-chat').classList.remove('active');
+  document.getElementById('sc-home').classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

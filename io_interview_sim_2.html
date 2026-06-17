@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>HR Interview Simulation — I/O Psychology</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:transparent;color:#1a1a2e;padding:16px}
+.wrap{max-width:740px;margin:0 auto}
+.screen{display:none}.screen.active{display:block}
+.card{background:#fff;border-radius:12px;padding:28px 24px;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#185FA5;margin-bottom:6px}
+h1{font-size:21px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.sub{font-size:13px;color:#666;line-height:1.6;margin-bottom:24px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.role-card{border:2px solid #d0d7e0;border-radius:12px;padding:20px;cursor:pointer;transition:border-color .2s,background .2s;background:#f7f9fc;text-align:center}
+.role-card:hover{border-color:#185FA5;background:#EBF3FC}
+.role-icon{font-size:32px;margin-bottom:10px}
+.role-title{font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+.role-desc{font-size:12px;color:#666;line-height:1.5}
+.chat-wrap{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);overflow:hidden}
+.chat-header{background:#185FA5;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.av{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hdr-info{flex:1}
+.hdr-name{font-size:14px;font-weight:700}
+.hdr-sub{font-size:11px;opacity:.8}
+.hdr-badge{font-size:11px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;white-space:nowrap}
+.prog-bar{height:4px;background:rgba(255,255,255,.3)}
+.prog-fill{height:4px;background:#fff;transition:width .4s}
+.messages{padding:16px;min-height:320px;max-height:440px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:#f7f9fc}
+.msg{display:flex;gap:10px;align-items:flex-start;max-width:88%}
+.msg.ai{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
+.msg.ai .msg-av{background:#185FA5;color:#fff}
+.msg.user .msg-av{background:#0F6E56;color:#fff}
+.bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.6;white-space:pre-wrap}
+.msg.ai .bubble{background:#fff;border:1px solid #d0d7e0;border-top-left-radius:2px;color:#1a1a2e}
+.msg.user .bubble{background:#185FA5;color:#fff;border-top-right-radius:2px}
+.bubble.typing{color:#888;font-style:italic}
+.tip-wrap{display:flex;gap:10px;align-items:flex-start;max-width:88%;align-self:flex-start}
+.tip-av{width:32px;height:32px;border-radius:50%;background:#B85C00;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
+.tip-bubble{padding:10px 14px;border-radius:12px;border-top-left-radius:2px;font-size:13px;line-height:1.6;background:#FFF3E0;border:1px solid #FFCC80;color:#5D4037}
+.tip-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#B85C00;margin-bottom:4px}
+.sys-msg{font-size:12px;color:#888;text-align:center;padding:4px 0;font-style:italic;align-self:center}
+.input-area{padding:12px 16px;background:#fff;border-top:1px solid #e0e0e0;display:flex;gap:10px;align-items:flex-end}
+textarea{flex:1;border:1.5px solid #d0d7e0;border-radius:8px;padding:10px 12px;font-size:14px;font-family:Arial,sans-serif;resize:none;outline:none;line-height:1.5;color:#1a1a2e;background:#f7f9fc;min-height:44px;max-height:120px}
+textarea:focus{border-color:#185FA5;background:#fff}
+textarea:disabled{opacity:.5;cursor:not-allowed}
+.send-btn{padding:10px 18px;background:#185FA5;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;flex-shrink:0}
+.send-btn:hover:not(:disabled){background:#0C447C}
+.send-btn:disabled{background:#b0bec5;cursor:default}
+.end-card{background:#fff;border-radius:12px;padding:28px 24px;box-shadow:0 2px 12px rgba(0,0,0,.1);text-align:center}
+.end-icon{font-size:48px;margin-bottom:12px}
+.end-title{font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.end-sub{font-size:14px;color:#666;margin-bottom:24px;line-height:1.6}
+.sum-box{background:#f7f9fc;border:1px solid #d0d7e0;border-radius:10px;padding:16px;margin-bottom:20px;text-align:left;font-size:13px;line-height:1.7;color:#1a1a2e}
+.sum-box h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#185FA5;margin-bottom:10px}
+.btn{padding:10px 22px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:background .15s}
+.btn-blue{background:#185FA5;color:#fff}.btn-blue:hover{background:#0C447C}
+@media(max-width:500px){
+  .role-grid{grid-template-columns:1fr}
+  body{padding:10px}
+  h1{font-size:18px}
+  .messages{max-height:360px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Role select -->
+<div class="screen active" id="sc-role">
+  <div class="card">
+    <div class="eyebrow">I/O Psychology — PRPY 134</div>
+    <h1>HR Interview Simulation</h1>
+    <p class="sub">Practice a structured clinical/psychology job interview powered by AI. Choose your role — you can be the applicant answering questions, or the HR interviewer asking them.</p>
+    <div class="role-grid">
+      <div class="role-card" onclick="startSim('applicant')">
+        <div class="role-icon">🎓</div>
+        <div class="role-title">I am the Applicant</div>
+        <div class="role-desc">The AI plays the HR interviewer. Answer 5 structured questions for a Psychological Assessment Specialist role.</div>
+      </div>
+      <div class="role-card" onclick="startSim('interviewer')">
+        <div class="role-icon">📋</div>
+        <div class="role-title">I am the Interviewer</div>
+        <div class="role-desc">The AI plays the job applicant Maria Santos. Conduct the interview and get coaching tips on your technique.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chat -->
+<div class="screen" id="sc-chat">
+  <div class="chat-wrap">
+    <div class="chat-header">
+      <div class="av" id="hdr-av">🏢</div>
+      <div class="hdr-info">
+        <div class="hdr-name" id="hdr-name">Interview Session</div>
+        <div class="hdr-sub" id="hdr-sub">Psychological Assessment Specialist</div>
+      </div>
+      <div class="hdr-badge" id="hdr-badge">Q 0 / 5</div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+      <textarea id="user-input" placeholder="Type your response here..." rows="1"
+        oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMsg()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- End -->
+<div class="screen" id="sc-end">
+  <div class="end-card">
+    <div class="end-icon">✅</div>
+    <div class="end-title">Simulation Complete</div>
+    <div class="end-sub" id="end-sub"></div>
+    <div class="sum-box">
+      <h3>AI Performance Summary</h3>
+      <div id="sum-text">Generating your summary...</div>
+    </div>
+    <button class="btn btn-blue" onclick="restart()">Start a new simulation</button>
+  </div>
+</div>
+
+</div>
+<script>
+var role = null;
+var qCount = 0;
+var maxQ = 5;
+var chatHistory = []; // [{role, content}] — pure conversation, no duplication
+
+var SYS_APPLICANT = 'You are Mr. Segovia, a professional HR Manager conducting a structured job interview at MindBridge Mental Health Clinic in the Philippines. The position is Psychological Assessment Specialist. The candidate is a psychology graduate.\n\nConduct exactly 5 interview questions, one at a time. After EACH candidate response, give brief professional feedback in 2 sentences (one strength, one improvement). Then ask the next question.\n\nCover these topics in order: (1) motivation for the role, (2) relevant training or experience, (3) behavioral situation involving a difficult client, (4) knowledge of psychological assessment tools used in the Philippines, (5) professional ethics and confidentiality.\n\nAfter giving feedback on the 5th answer, end with the word INTERVIEW_COMPLETE on its own line.\n\nKeep a warm, professional tone. Do not number your questions. Do not ask more than one question at a time.';
+
+var SYS_INTERVIEWER = 'You are Maria Santos, a fresh psychology graduate applying for a Psychological Assessment Specialist position at MindBridge Mental Health Clinic in the Philippines. You have practicum experience.\n\nThe user is the HR interviewer. Respond to their questions naturally and realistically — give answers that are sometimes strong, sometimes underdeveloped, like a real fresh graduate.\n\nAfter EACH of your answers, add a coaching tip for the interviewer on a new line starting with exactly "COACHING TIP:" (in that exact format). The tip should be 1 sentence about how they could improve their interviewing technique (e.g. use of probing questions, structure, behavioral question format, active listening cues).\n\nCount the interviewer\'s questions. After you have answered exactly 5 questions, respond to the 5th and then write INTERVIEW_COMPLETE on its own line after your coaching tip.\n\nKeep a warm, slightly nervous but eager tone appropriate for a fresh graduate.';
+
+function startSim(r) {
+  role = r;
+  qCount = 0;
+  chatHistory = [];
+
+  document.getElementById('sc-role').classList.remove('active');
+  document.getElementById('sc-chat').classList.add('active');
+  document.getElementById('messages').innerHTML = '';
+  updateProgress();
+
+  if (role === 'applicant') {
+    document.getElementById('hdr-av').textContent = '👩‍💼';
+    document.getElementById('hdr-name').textContent = 'Mr. Segovia — HR Manager';
+    document.getElementById('hdr-sub').textContent = 'Psychological Assessment Specialist Interview';
+    setInput(false);
+    // AI speaks first
+    var seed = 'Good afternoon! Thank you for coming in. I\'m Mr. Segovia, HR Manager at MindBridge Mental Health Clinic. We\'re glad you\'re here. Please make yourself comfortable — let\'s begin with our first question.\n\nCan you tell me why you are applying for the Psychological Assessment Specialist position, and what draws you to clinical psychology work?';
+    addBubble('ai', seed);
+    chatHistory.push({role:'assistant', content: seed});
+    qCount = 1;
+    updateProgress();
+    setInput(true);
+  } else {
+    document.getElementById('hdr-av').textContent = '🎓';
+    document.getElementById('hdr-name').textContent = 'Maria Santos — Applicant';
+    document.getElementById('hdr-sub').textContent = 'You are conducting the interview';
+    // AI (applicant) speaks first with intro
+    setInput(false);
+    var intro = 'Good afternoon! I\'m Maria Santos. Thank you so much for having me today — I\'m really excited about this opportunity at MindBridge Clinic.\n\nCOACHING TIP: Start by introducing yourself and the clinic, then briefly outline how the interview will be structured — this immediately sets a professional tone and helps the candidate feel at ease.';
+    renderInterviewerMsg(intro);
+    chatHistory.push({role:'assistant', content: intro});
+    addSysMsg('You are the interviewer. Ask Maria your first interview question.');
+    setInput(true);
+  }
+}
+
+function sendMsg() {
+  var inp = document.getElementById('user-input');
+  var txt = inp.value.trim();
+  if (!txt) return;
+  inp.value = ''; autoResize(inp);
+  setInput(false);
+
+  addBubble('user', txt);
+  chatHistory.push({role:'user', content: txt});
+
+  callAI(function(reply) {
+    chatHistory.push({role:'assistant', content: reply});
+
+    var isDone = reply.indexOf('INTERVIEW_COMPLETE') !== -1;
+    var cleanReply = reply.replace('INTERVIEW_COMPLETE', '').trim();
+
+    if (role === 'applicant') {
+      addBubble('ai', cleanReply);
+      qCount++;
+      updateProgress();
+      if (isDone || qCount > maxQ) {
+        setTimeout(endSim, 1000);
+      } else {
+        setInput(true);
+        document.getElementById('user-input').focus();
+      }
+    } else {
+      renderInterviewerMsg(cleanReply);
+      qCount++;
+      updateProgress();
+      if (isDone || qCount > maxQ) {
+        setTimeout(endSim, 1000);
+      } else {
+        setInput(true);
+        document.getElementById('user-input').focus();
+      }
+    }
+  });
+}
+
+function renderInterviewerMsg(text) {
+  // Split on COACHING TIP:
+  var parts = text.split(/COACHING TIP:/i);
+  var mainText = parts[0].trim();
+  var tipText = parts.length > 1 ? parts[1].trim() : null;
+
+  if (mainText) addBubble('ai', mainText);
+  if (tipText) addCoachingTip(tipText);
+}
+
+function callAI(cb) {
+  addTyping();
+  var sys = role === 'applicant' ? SYS_APPLICANT : SYS_INTERVIEWER;
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1000,
+      system: sys,
+      messages: chatHistory
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    removeTyping();
+    var reply = (data.content || []).map(function(b){ return b.text || ''; }).join('').trim();
+    if (!reply) reply = 'I apologize, could you repeat that?';
+    cb(reply);
+  })
+  .catch(function(){
+    removeTyping();
+    addBubble('ai', 'Connection issue — please check your internet and try again.');
+    setInput(true);
+  });
+}
+
+function addBubble(type, text) {
+  var msgs = document.getElementById('messages');
+  var wrap = document.createElement('div');
+  wrap.className = 'msg ' + (type === 'ai' ? 'ai' : 'user');
+  var av = document.createElement('div');
+  av.className = 'msg-av';
+  av.textContent = type === 'ai'
+    ? (role === 'applicant' ? '👩‍💼' : '🎓')
+    : '👤';
+  var bub = document.createElement('div');
+  bub.className = 'bubble';
+  bub.textContent = text;
+  wrap.appendChild(av);
+  wrap.appendChild(bub);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = 99999;
+}
+
+function addCoachingTip(text) {
+  var msgs = document.getElementById('messages');
+  var wrap = document.createElement('div');
+  wrap.className = 'tip-wrap';
+  var av = document.createElement('div');
+  av.className = 'tip-av';
+  av.textContent = '💡';
+  var bub = document.createElement('div');
+  bub.className = 'tip-bubble';
+  bub.innerHTML = '<div class="tip-label">Interviewer Coaching Tip</div>' + escHtml(text);
+  wrap.appendChild(av);
+  wrap.appendChild(bub);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = 99999;
+}
+
+function addSysMsg(text) {
+  var msgs = document.getElementById('messages');
+  var div = document.createElement('div');
+  div.className = 'sys-msg';
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = 99999;
+}
+
+function addTyping() {
+  var msgs = document.getElementById('messages');
+  var wrap = document.createElement('div');
+  wrap.className = 'msg ai'; wrap.id = 'typing';
+  var av = document.createElement('div'); av.className = 'msg-av';
+  av.textContent = role === 'applicant' ? '👩‍💼' : '🎓';
+  var bub = document.createElement('div'); bub.className = 'bubble typing';
+  bub.textContent = 'typing…';
+  wrap.appendChild(av); wrap.appendChild(bub);
+  msgs.appendChild(wrap); msgs.scrollTop = 99999;
+}
+
+function removeTyping() {
+  var t = document.getElementById('typing');
+  if (t) t.parentNode.removeChild(t);
+}
+
+function updateProgress() {
+  var pct = Math.round((qCount / maxQ) * 100);
+  document.getElementById('prog').style.width = Math.min(pct, 100) + '%';
+  document.getElementById('hdr-badge').textContent = 'Q ' + Math.min(qCount, maxQ) + ' / ' + maxQ;
+}
+
+function setInput(on) {
+  document.getElementById('user-input').disabled = !on;
+  document.getElementById('send-btn').disabled = !on;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function escHtml(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function endSim() {
+  document.getElementById('sc-chat').classList.remove('active');
+  document.getElementById('sc-end').classList.add('active');
+
+  document.getElementById('end-sub').textContent = role === 'applicant'
+    ? 'You completed a 5-question structured interview for the Psychological Assessment Specialist position. See your AI performance summary below.'
+    : 'You conducted a 5-question interview with Maria Santos. See your AI coaching summary below.';
+
+  var sumPrompt = role === 'applicant'
+    ? 'Based on this interview transcript, write a 5–6 sentence performance summary for the applicant. Cover: overall impression, strongest answer, weakest answer, communication style, and 2 specific suggestions for future interviews. Be constructive and professional. Use Filipino clinical context.'
+    : 'Based on this interview transcript, write a 5–6 sentence coaching summary for the HR interviewer. Cover: overall interview structure, best question asked, weakest question, use of behavioral/situational probes, and 2 specific suggestions to improve technique. Be constructive and professional.';
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1000,
+      messages: chatHistory.concat([{role:'user', content: sumPrompt}])
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    var txt = (data.content||[]).map(function(b){ return b.text||''; }).join('').trim();
+    document.getElementById('sum-text').textContent = txt;
+  })
+  .catch(function(){
+    document.getElementById('sum-text').textContent = 'Summary unavailable — please check your connection.';
+  });
+}
+
+function restart() {
+  role = null; qCount = 0; chatHistory = [];
+  document.getElementById('sc-end').classList.remove('active');
+  document.getElementById('sc-chat').classList.remove('active');
+  document.getElementById('sc-role').classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
