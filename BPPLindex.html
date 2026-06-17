@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BoardPrep Psych Lab</title>
+  <link rel="stylesheet" href="BPPLstyles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Psychological Assessment × I/O Psychology</p>
+      <h1>BoardPrep Psych Lab</h1>
+      <p class="subtitle">A board exam simulator for reasoning, recall, psychometric computation, and readiness tracking.</p>
+    </div>
+    <div class="hero-card">
+      <span id="totalAnswered">0</span>
+      <small>items answered</small>
+    </div>
+  </header>
+
+  <main class="shell">
+    <nav class="tabs" aria-label="App sections">
+      <button class="tab active" data-panel="quizPanel">Board Exam Mode</button>
+      <button class="tab" data-panel="reviewPanel">Wrong Answer Review</button>
+      <button class="tab" data-panel="computePanel">Psychometric Trainer</button>
+      <button class="tab" data-panel="trackerPanel">Readiness Tracker</button>
+      <button class="tab" data-panel="exportPanel">Export Report</button>
+    </nav>
+
+    <section id="quizPanel" class="panel active">
+      <div class="grid two">
+        <aside class="card controls">
+          <h2>Quiz Settings</h2>
+          <label>Domain
+            <select id="domainFilter">
+              <option value="all">All Domains</option>
+              <option value="Psychological Assessment">Psychological Assessment</option>
+              <option value="Industrial/Organizational Psychology">Industrial/Organizational Psychology</option>
+            </select>
+          </label>
+          <label>Topic
+            <select id="topicFilter"><option value="all">All Topics</option></select>
+          </label>
+          <label>Difficulty
+            <select id="difficultyFilter">
+              <option value="all">All Difficulty Levels</option>
+              <option value="Easy">Easy</option>
+              <option value="Moderate">Moderate</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </label>
+          <div class="button-row">
+            <button id="startQuiz" class="primary">Start / Shuffle</button>
+            <button id="resetProgress" class="ghost">Reset Progress</button>
+          </div>
+          <div class="statbox">
+            <div><strong id="scoreText">0 / 0</strong><span>Score</span></div>
+            <div><strong id="accuracyText">0%</strong><span>Accuracy</span></div>
+          </div>
+        </aside>
+
+        <article class="card question-card">
+          <div class="meta-row">
+            <span id="itemCount">Item 1 of 100</span>
+            <span id="itemTag">Topic</span>
+          </div>
+          <h2 id="questionText">Press Start / Shuffle to begin.</h2>
+          <div id="optionsBox" class="options"></div>
+          <div id="feedbackBox" class="feedback hidden"></div>
+          <div class="button-row end">
+            <button id="checkAnswer" class="primary">Check Answer</button>
+            <button id="nextItem" class="secondary">Next Item</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="reviewPanel" class="panel">
+      <div class="card">
+        <h2>Wrong Answer Review</h2>
+        <p>Items missed during this session appear here. Retake them until cleared.</p>
+        <div class="button-row"><button id="loadWrong" class="primary">Load Missed Items</button><button id="clearWrong" class="ghost">Clear Missed List</button></div>
+        <div id="wrongList" class="review-list"></div>
+      </div>
+    </section>
+
+    <section id="computePanel" class="panel">
+      <div class="grid two">
+        <div class="card">
+          <h2>Standard Score Trainer</h2>
+          <label>Raw Score <input id="rawScore" type="number" value="42"></label>
+          <label>Mean <input id="meanScore" type="number" value="35"></label>
+          <label>Standard Deviation <input id="sdScore" type="number" value="7"></label>
+          <button id="computeZ" class="primary">Compute z, T, Percentile Approximation</button>
+          <div id="zOutput" class="output"></div>
+        </div>
+        <div class="card">
+          <h2>Item Analysis Trainer</h2>
+          <label>Correct in Upper Group <input id="upperCorrect" type="number" value="18"></label>
+          <label>Upper Group Size <input id="upperN" type="number" value="25"></label>
+          <label>Correct in Lower Group <input id="lowerCorrect" type="number" value="8"></label>
+          <label>Lower Group Size <input id="lowerN" type="number" value="25"></label>
+          <button id="computeItem" class="primary">Compute Difficulty and Discrimination</button>
+          <div id="itemOutput" class="output"></div>
+        </div>
+      </div>
+      <div class="card wide-note">
+        <h2>Use Rule</h2>
+        <p>Use the computations for board-style reasoning. Do not treat these as full psychometric validation. They are practice-level estimates.</p>
+      </div>
+    </section>
+
+    <section id="trackerPanel" class="panel">
+      <div class="card">
+        <h2>Readiness Tracker</h2>
+        <p>Topic mastery is based on answered items in this browser session.</p>
+        <div id="trackerList" class="tracker"></div>
+      </div>
+    </section>
+
+    <section id="exportPanel" class="panel">
+      <div class="card">
+        <h2>Export Student Study Report</h2>
+        <label>Student Name <input id="studentName" type="text" placeholder="Enter name"></label>
+        <label>Section / Class <input id="sectionName" type="text" placeholder="Enter section"></label>
+        <button id="generateReport" class="primary">Generate Report</button>
+        <textarea id="reportBox" rows="14" placeholder="Generated report will appear here."></textarea>
+        <div class="button-row"><button id="copyReport" class="secondary">Copy Report</button><button id="downloadReport" class="ghost">Download .txt</button></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>BoardPrep Psych Lab · Static GitHub Pages app · No login · No data sent to a server</p>
+  </footer>
+
+  <script src="BPPLdata.js"></script>
+  <script src="BPPLapp.js"></script>
+</body>
+</html>
