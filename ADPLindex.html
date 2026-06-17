@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AbDev BoardPrep Lab</title>
+  <link rel="stylesheet" href="ADPLstyles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Board Licensure Review App</p>
+      <h1>AbDev BoardPrep Lab</h1>
+      <p class="subtitle">Abnormal Psychology × Developmental Psychology board exam simulator</p>
+    </div>
+    <div class="score-card">
+      <span>Readiness</span>
+      <strong id="readinessScore">0%</strong>
+      <small id="answeredCount">0 answered</small>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel sidebar">
+      <h2>Study Modes</h2>
+      <button class="nav active" data-section="diagnostic">Diagnostic Quiz</button>
+      <button class="nav" data-section="abnormal">Abnormal Psych</button>
+      <button class="nav" data-section="developmental">Developmental Psych</button>
+      <button class="nav" data-section="scenario">Case Reasoning</button>
+      <button class="nav" data-section="wrong">Wrong Answer Review</button>
+      <button class="nav" data-section="tracker">Readiness Tracker</button>
+      <button class="nav" data-section="trainer">Concept Trainer</button>
+      <button class="nav" data-section="export">Export Report</button>
+      <hr />
+      <label>Topic Filter</label>
+      <select id="topicFilter"><option value="all">All topics</option></select>
+      <label>Difficulty</label>
+      <select id="difficultyFilter">
+        <option value="all">All levels</option>
+        <option value="Easy">Easy</option>
+        <option value="Moderate">Moderate</option>
+        <option value="Difficult">Difficult</option>
+      </select>
+      <button id="resetProgress" class="danger">Reset Progress</button>
+    </aside>
+
+    <section class="content">
+      <section id="diagnostic" class="section active">
+        <div class="panel">
+          <h2>Diagnostic Quiz</h2>
+          <p>Mixed Abnormal and Developmental Psychology items. Answer, check rationale, then move to the next item.</p>
+          <div id="quizBox" class="quiz-box"></div>
+        </div>
+      </section>
+
+      <section id="abnormal" class="section">
+        <div class="panel">
+          <h2>Abnormal Psychology Mode</h2>
+          <p>Focuses on DSM-oriented reasoning, symptoms, differential diagnosis, risk, and intervention principles.</p>
+          <div id="abnormalBox" class="quiz-box"></div>
+        </div>
+      </section>
+
+      <section id="developmental" class="section">
+        <div class="panel">
+          <h2>Developmental Psychology Mode</h2>
+          <p>Focuses on lifespan development, theories, milestones, attachment, cognition, morality, and aging.</p>
+          <div id="developmentalBox" class="quiz-box"></div>
+        </div>
+      </section>
+
+      <section id="scenario" class="section">
+        <div class="panel">
+          <h2>Case Reasoning Lab</h2>
+          <p>Read the short case and identify the most defensible board-exam answer.</p>
+          <button id="newScenario">Generate Scenario</button>
+          <div id="scenarioBox" class="scenario-box"></div>
+        </div>
+      </section>
+
+      <section id="wrong" class="section">
+        <div class="panel">
+          <h2>Wrong Answer Review</h2>
+          <p>Retake only the items missed during practice.</p>
+          <div id="wrongBox"></div>
+        </div>
+      </section>
+
+      <section id="tracker" class="section">
+        <div class="panel">
+          <h2>Readiness Tracker</h2>
+          <div id="trackerBox" class="tracker-grid"></div>
+        </div>
+      </section>
+
+      <section id="trainer" class="section">
+        <div class="panel">
+          <h2>Concept Trainer</h2>
+          <div class="trainer-grid">
+            <div class="mini-card">
+              <h3>Differential Diagnosis Drill</h3>
+              <select id="symptomCluster">
+                <option value="panic">Abrupt fear, palpitations, shortness of breath</option>
+                <option value="ocd">Intrusive thoughts and repetitive rituals</option>
+                <option value="mania">Elevated mood, decreased sleep, risky behavior</option>
+                <option value="autism">Social communication difficulty and restricted behavior</option>
+                <option value="delirium">Acute fluctuating attention disturbance</option>
+              </select>
+              <button id="diagnosisDrill">Explain</button>
+              <p id="diagnosisOutput" class="output"></p>
+            </div>
+            <div class="mini-card">
+              <h3>Developmental Milestone Drill</h3>
+              <select id="milestoneCluster">
+                <option value="object">Object permanence</option>
+                <option value="conservation">Conservation</option>
+                <option value="identity">Identity vs role confusion</option>
+                <option value="attachment">Secure base behavior</option>
+                <option value="integrity">Ego integrity vs despair</option>
+              </select>
+              <button id="milestoneDrill">Explain</button>
+              <p id="milestoneOutput" class="output"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="export" class="section">
+        <div class="panel">
+          <h2>Export Study Report</h2>
+          <p>Copy the report into Canvas, LMS submission, or student portfolio.</p>
+          <button id="buildReport">Build Report</button>
+          <textarea id="reportText" rows="18"></textarea>
+          <button id="copyReport">Copy Report</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>For educational board exam practice only. Not a diagnostic tool.</p>
+  </footer>
+
+  <script src="ADPLdata.js"></script>
+  <script src="ADPLapp.js"></script>
+</body>
+</html>
